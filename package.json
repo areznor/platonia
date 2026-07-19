@@ -1,7 +1,8 @@
 {
-  "name": "platonia-app",
-  "version": "0.1.0",
+  "name": "platonia",
+  "version": "2.0.0",
   "private": true,
+  "description": "Platonia — a terra do saber! App educacional com trilhas, biblioteca e certificados.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

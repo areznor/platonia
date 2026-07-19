@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Platonia — a terra do saber!
 
-## Getting Started
+App educacional gratuito estilo Duolingo, com trilhas de aprendizado, biblioteca, certificados e gamificação.
 
-First, run the development server:
+**Domínio:** [platonia.academy](https://platonia.academy)
+
+## O que há de novo (v2)
+
+Esta versão parte do **protótipo HTML local** (motor completo de aprendizado) e substitui o site Next.js antigo do GitHub, que era sobretudo uma landing/marketing sem motor de lições.
+
+### Reaproveitado do repositório anterior
+- Identidade “Platonia Academy” e metáfora do passaporte / caverna de Platão
+- Assets de marca (`public/images`)
+- Intenção de landing + CTA “Criar passaporte”
+- Stack Next.js como casca do produto (pronto para auth/MongoDB/Stripe no futuro)
+
+### Vindo do novo protótipo (e melhorado)
+- Splash da caverna → passaporte → tutorial → mapa
+- 8 regiões com trilhas, Teste da Seção e certificados
+- 5 tipos de exercício + reforço ao errar
+- Biblioteca (resumos + livro-jogo) que revela caminhos ocultos
+- Ágora (loja), ligas, conquistas, ofensiva, corações
+- **Novidades v2:** meta diária de XP, desbloqueio progressivo de regiões, combo de acertos, contagem regressiva de corações, feedback sonoro e trilha visual com caminho
+
+## Como rodar
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Landing: [http://localhost:3000](http://localhost:3000)
+- App: [http://localhost:3000/aprender/](http://localhost:3000/aprender/)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Estrutura
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/app/          → landing Next.js (marca + mapa)
+public/aprender/  → app educacional (SPA HTML/JS)
+public/images/    → logos e recursos visuais
+```
 
-## Learn More
+O conteúdo educacional vive em `CONTEUDO_PLATONIA` dentro de `public/aprender/index.html` — edite ali para adicionar lições, livros e regiões.
 
-To learn more about Next.js, take a look at the following resources:
+## Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js 14 + React + Tailwind (landing)
+- HTML/CSS/JS vanilla (motor de aprendizado, localStorage)
+- Sem backend obrigatório nesta versão (progresso no navegador)

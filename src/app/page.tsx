@@ -1,100 +1,165 @@
 import Image from "next/image";
+import Link from "next/link";
+
+const regioes = [
+  { nome: "Cidade da Matemática", icone: "🏛️" },
+  { nome: "Praça da Filosofia", icone: "🦉" },
+  { nome: "Beco da História", icone: "📜" },
+  { nome: "Esquina da Gramática", icone: "✍️" },
+  { nome: "Viela das Artes", icone: "🎨" },
+  { nome: "Laboratório de Ciências", icone: "🔬" },
+  { nome: "Vila da Saúde", icone: "🌿" },
+  { nome: "Parque Tecnológico", icone: "💻" },
+];
+
+const beneficios = [
+  {
+    titulo: "Trilhas gamificadas",
+    desc: "Lições curtas com corações, XP, ofensiva e Teste da Seção — no ritmo do Duolingo.",
+  },
+  {
+    titulo: "Biblioteca viva",
+    desc: "Resumos e livros-jogo que revelam caminhos ocultos no mapa de Platonia.",
+  },
+  {
+    titulo: "Certificados",
+    desc: "Complete uma região e baixe seu certificado da Academia de Platonia.",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen overflow-x-hidden bg-[#0b1624] text-[#eaf2fb]">
+      <header className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-5 sm:px-10">
+        <div className="brand-font text-xl tracking-[0.2em] text-[#ffc800] sm:text-2xl">
+          PLATONIA
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href="/aprender/"
+          className="rounded-2xl bg-[#ffc800] px-4 py-2 text-sm font-black uppercase tracking-wide text-[#16324f] shadow-[0_4px_0_#e0a800] transition active:translate-y-1 active:shadow-none"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+          Entrar
+        </Link>
+      </header>
+
+      <section className="relative flex min-h-[100svh] flex-col items-center justify-center px-6 pb-16 pt-24 text-center">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_28%,#274763_0%,#101e2e_55%,#060d15_100%)]"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[28vh] bg-gradient-to-t from-black/55 to-transparent"
+        />
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-[22%] h-28 w-28 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,#fff6ce_0%,#ffc800_45%,rgba(255,200,0,0)_72%)] opacity-90 blur-[1px] animate-pulse"
+        />
+
+        <div className="relative z-10 max-w-2xl">
+          <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.35em] text-[#bbd3ea]">
+            a terra do saber
+          </p>
+          <h1 className="brand-font text-5xl tracking-[0.12em] text-[#ffc800] drop-shadow-[0_0_30px_rgba(255,200,0,0.45)] sm:text-7xl">
+            PLATONIA
+          </h1>
+          <p className="mx-auto mt-6 max-w-md text-lg font-bold text-[#d6e6f5] sm:text-xl">
+            Você está a um passo de sair da caverna. Tire seu passaporte e
+            comece a aprender.
+          </p>
+          <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <Link
+              href="/aprender/"
+              className="inline-flex min-w-[220px] items-center justify-center rounded-2xl bg-[#58cc02] px-7 py-4 text-base font-black uppercase tracking-wide text-white shadow-[0_4px_0_#46a302] transition hover:brightness-105 active:translate-y-1 active:shadow-none"
+            >
+              Criar passaporte
+            </Link>
+            <a
+              href="#mapa"
+              className="inline-flex min-w-[220px] items-center justify-center rounded-2xl border-2 border-white/20 bg-white/5 px-7 py-4 text-base font-black uppercase tracking-wide text-white backdrop-blur transition hover:bg-white/10"
+            >
+              Ver o mapa
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#f7f9fc] px-6 py-20 text-[#16324f]">
+        <div className="mx-auto grid max-w-5xl gap-10 md:grid-cols-3">
+          {beneficios.map((b) => (
+            <div key={b.titulo}>
+              <h2 className="brand-font text-2xl text-[#1c7ac4]">{b.titulo}</h2>
+              <p className="mt-3 text-base font-bold leading-relaxed text-[#5b6b80]">
+                {b.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="mapa" className="bg-[#eef3f9] px-6 py-20 text-[#16324f]">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-10 text-center">
+            <h2 className="brand-font text-3xl sm:text-4xl">Mapa de Platonia</h2>
+            <p className="mt-3 font-bold text-[#5b6b80]">
+              Oito regiões do saber. Uma trilha por vez. Caminhos ocultos na
+              Biblioteca.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {regioes.map((r) => (
+              <div
+                key={r.nome}
+                className="rounded-2xl border-2 border-[#e5e9f0] bg-white p-4 shadow-[0_4px_0_#e5e9f0]"
+              >
+                <div className="text-3xl">{r.icone}</div>
+                <div className="mt-2 text-sm font-extrabold leading-snug">
+                  {r.nome}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-12 overflow-hidden rounded-[28px] border-2 border-[#e5e9f0] bg-white shadow-[0_6px_0_#e5e9f0]">
+            <div className="grid items-center gap-0 md:grid-cols-2">
+              <div className="relative min-h-[240px] md:min-h-[320px]">
+                <Image
+                  src="/images/recurso1.png"
+                  alt="Mapa e trilhas de Platonia"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+              </div>
+              <div className="p-8 md:p-10">
+                <h3 className="brand-font text-2xl text-[#1c7ac4]">
+                  Microlearning com alma clássica
+                </h3>
+                <p className="mt-3 font-bold leading-relaxed text-[#5b6b80]">
+                  Do passaporte à Ágora: ofensiva, dracmas, ligas e certificados.
+                  A Biblioteca conecta leitura e prática — terminar um livro
+                  libera exercícios secretos na trilha.
+                </p>
+                <Link
+                  href="/aprender/"
+                  className="mt-6 inline-flex rounded-2xl bg-[#1c7ac4] px-6 py-3 text-sm font-black uppercase tracking-wide text-white shadow-[0_4px_0_#145e99] transition active:translate-y-1 active:shadow-none"
+                >
+                  Começar agora
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t border-white/10 bg-[#060d15] px-6 py-10 text-center text-sm font-bold text-[#bbd3ea]">
+        <div className="brand-font mb-2 text-lg tracking-[0.2em] text-[#ffc800]">
+          PLATONIA
+        </div>
+        <p>platonia.academy · App educacional gratuito</p>
+        <p className="mt-2 text-[#5b6b80]">
+          Saia da caverna. Tire agora mesmo o seu passaporte.
+        </p>
       </footer>
     </div>
   );

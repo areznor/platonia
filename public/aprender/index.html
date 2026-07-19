@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PLATONIA — a terra do saber!</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   PLATONIA — A TERRA DO SABER
+   Design system: azul filosófico + ouro de Atena
+   ============================================================ */
+:root{
+  --azul:#1C7AC4; --azul-claro:#58A6FF; --azul-esc:#145E99;
+  --ouro:#FFC800; --ouro-esc:#E0A800; --ouro-claro:#FFE066;
+  --tinta:#16324F; --fundo:#F7F9FC; --branco:#FFFFFF;
+  --verde:#58CC02; --verde-esc:#46A302;
+  --verm:#FF4B4B; --verm-esc:#D63C3C;
+  --cinza:#E5E9F0; --cinza-esc:#AFBACC; --texto2:#5B6B80;
+  --raio:16px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0; padding:0;}
+body{font-family:'Nunito',sans-serif; background:var(--fundo); color:var(--tinta); font-size:16px;}
+h1,h2,h3,.fredoka{font-family:'Fredoka',sans-serif;}
+button{font-family:inherit;}
+
+/* ---------- Botões estilo "3D" ---------- */
+.btn{display:inline-block; border:none; cursor:pointer; font-weight:900; font-size:1rem;
+  padding:14px 28px; border-radius:var(--raio); color:#fff; letter-spacing:.5px;
+  transition:transform .08s, box-shadow .08s, filter .15s; text-transform:uppercase;}
+.btn:active{transform:translateY(4px); box-shadow:none !important;}
+.btn:focus-visible{outline:3px solid var(--tinta); outline-offset:2px;}
+.btn-azul{background:var(--azul); box-shadow:0 4px 0 var(--azul-esc);}
+.btn-verde{background:var(--verde); box-shadow:0 4px 0 var(--verde-esc);}
+.btn-ouro{background:var(--ouro); color:var(--tinta); box-shadow:0 4px 0 var(--ouro-esc);}
+.btn-verm{background:var(--verm); box-shadow:0 4px 0 var(--verm-esc);}
+.btn-branco{background:#fff; color:var(--azul); border:2px solid var(--cinza); box-shadow:0 4px 0 var(--cinza);}
+.btn-largo{display:block; width:100%;}
+.btn:disabled{background:var(--cinza); color:var(--cinza-esc); box-shadow:0 4px 0 var(--cinza-esc); cursor:not-allowed;}
+
+/* ---------- Telas (overlays) ---------- */
+.tela{position:fixed; inset:0; display:none; overflow-y:auto; z-index:50; background:var(--fundo);}
+.tela.ativa{display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.tela-conteudo{width:100%; max-width:480px; padding:24px; text-align:center;}
+
+/* ---------- Splash: a caverna ---------- */
+#tela-splash{background:radial-gradient(ellipse at 50% 30%, #274763 0%, #101E2E 55%, #060D15 100%); color:#EAF2FB;}
+#tela-splash h1{font-size:clamp(2rem,8vw,3.2rem); letter-spacing:3px; margin:0; color:var(--ouro);
+  text-shadow:0 0 30px rgba(255,200,0,.45);}
+#tela-splash .subtitulo{color:#BBD3EA; font-weight:700; letter-spacing:2px; margin-top:4px;}
+#tela-splash p{font-size:1.1rem; color:#D6E6F5;}
+.luz{width:96px; height:96px; border-radius:50%; margin:36px auto 12px; cursor:pointer; border:none;
+  background:radial-gradient(circle, #FFF6CE 0%, var(--ouro) 45%, rgba(255,200,0,0) 72%);
+  animation:pulsar 1.8s ease-in-out infinite; position:relative;}
+.luz::after{content:""; position:absolute; inset:-40px; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,220,80,.28), transparent 65%);}
+@keyframes pulsar{0%,100%{transform:scale(1); filter:brightness(1);} 50%{transform:scale(1.18); filter:brightness(1.35);}}
+.dica-luz{animation:aparecer 1.2s ease .6s both; font-weight:800; letter-spacing:1px;}
+@keyframes aparecer{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+.clareando{animation:clarear .9s ease forwards;}
+@keyframes clarear{to{background:#fff;} }
+.sombras-caverna{position:absolute; bottom:0; left:0; right:0; height:22vh; pointer-events:none;
+  background:linear-gradient(to top, rgba(0,0,0,.55), transparent); }
+
+/* ---------- Cartões / passaporte ---------- */
+.cartao{background:#fff; border:2px solid var(--cinza); border-radius:20px; padding:24px;
+  box-shadow:0 4px 0 var(--cinza); text-align:left;}
+.passaporte{border:3px solid var(--ouro); box-shadow:0 6px 0 var(--ouro-esc); position:relative; overflow:hidden;}
+.passaporte::before{content:"🏛️"; position:absolute; right:-14px; bottom:-18px; font-size:6rem; opacity:.08;}
+.campo{margin:14px 0; text-align:left;}
+.campo label{display:block; font-weight:800; margin-bottom:6px; color:var(--texto2); font-size:.85rem; text-transform:uppercase; letter-spacing:1px;}
+.campo input{width:100%; padding:14px; border:2px solid var(--cinza); border-radius:12px; font-size:1rem;
+  font-family:inherit; font-weight:700; color:var(--tinta); background:var(--fundo);}
+.campo input:focus{outline:none; border-color:var(--azul);}
+.campo .erro-msg{color:var(--verm); font-size:.8rem; font-weight:800; display:none; margin-top:4px;}
+.avatares{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:10px 0;}
+.avatar-opcao{width:60px; height:60px; font-size:1.8rem; border-radius:50%; border:3px solid var(--cinza);
+  background:#fff; cursor:pointer; transition:transform .12s, border-color .12s;}
+.avatar-opcao:hover{transform:scale(1.08);}
+.avatar-opcao.selecionado{border-color:var(--ouro); background:var(--ouro-claro); transform:scale(1.12);}
+
+/* ---------- Visto / carimbo ---------- */
+.carimbo{display:inline-block; border:5px solid var(--verde); color:var(--verde); border-radius:14px;
+  padding:10px 22px; font-family:'Fredoka'; font-weight:700; font-size:1.4rem; letter-spacing:2px;
+  transform:rotate(-8deg); animation:carimbar .5s cubic-bezier(.2,2,.4,1) both; text-transform:uppercase;}
+@keyframes carimbar{0%{transform:rotate(-8deg) scale(3); opacity:0;} 100%{transform:rotate(-8deg) scale(1); opacity:1;}}
+.tutorial-passo{display:none; animation:aparecer .4s ease both;}
+.tutorial-passo.ativo{display:block;}
+.pontinhos{display:flex; gap:8px; justify-content:center; margin:16px 0 4px;}
+.pontinhos span{width:10px; height:10px; border-radius:50%; background:var(--cinza);}
+.pontinhos span.ativo{background:var(--azul);}
+
+/* ---------- Shell do app (topbar + conteúdo + nav) ---------- */
+#shell{display:none; min-height:100vh;}
+#shell.ativa{display:block;}
+#topbar{position:sticky; top:0; z-index:30; background:#fff; border-bottom:2px solid var(--cinza);
+  display:flex; justify-content:center; gap:18px; padding:10px 12px; font-weight:900; font-size:1rem;}
+.stat{display:flex; align-items:center; gap:5px; cursor:default;}
+.stat small{font-size:.7rem; color:var(--texto2); display:block;}
+#conteudo{max-width:680px; margin:0 auto; padding:20px 16px 96px;}
+#navbar{position:fixed; bottom:0; left:0; right:0; z-index:30; background:#fff; border-top:2px solid var(--cinza);
+  display:flex; justify-content:space-around; padding:6px 4px calc(6px + env(safe-area-inset-bottom));}
+.nav-item{background:none; border:none; cursor:pointer; font-size:1.5rem; padding:8px 12px; border-radius:12px;
+  display:flex; flex-direction:column; align-items:center; gap:2px; color:var(--texto2); font-weight:800;}
+.nav-item span{font-size:.65rem; text-transform:uppercase; letter-spacing:.5px; font-family:'Nunito';}
+.nav-item.ativo{background:#E3F0FB; color:var(--azul); outline:2px solid var(--azul-claro);}
+@media (min-width:900px){
+  #navbar{top:0; bottom:0; left:0; right:auto; width:190px; flex-direction:column; justify-content:flex-start;
+    gap:6px; border-top:none; border-right:2px solid var(--cinza); padding:24px 12px;}
+  .nav-item{flex-direction:row; gap:12px; width:100%; justify-content:flex-start; padding:12px 16px;}
+  .nav-item span{font-size:.85rem;}
+  #topbar{margin-left:190px;}
+  #conteudo{margin-left:calc(190px + (100% - 190px - 680px)/2);}
+}
+
+/* ---------- Mapa ---------- */
+.titulo-secao{font-size:1.6rem; margin:6px 0 2px;}
+.subtitulo-secao{color:var(--texto2); font-weight:700; margin:0 0 18px;}
+.mapa-grade{display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:14px;}
+.regiao-cartao{background:#fff; border:2px solid var(--cinza); border-radius:18px; padding:16px;
+  cursor:pointer; text-align:left; box-shadow:0 4px 0 var(--cinza); transition:transform .1s;
+  position:relative; overflow:hidden; font-family:inherit;}
+.regiao-cartao:hover{transform:translateY(-3px);}
+.regiao-cartao .icone{font-size:2.2rem;}
+.regiao-cartao h3{margin:8px 0 4px; font-size:1.05rem; line-height:1.2;}
+.regiao-cartao .completa-selo{position:absolute; top:10px; right:10px; font-size:1.2rem;}
+.barra-prog{height:12px; background:var(--cinza); border-radius:99px; overflow:hidden; margin-top:8px;}
+.barra-prog > div{height:100%; background:linear-gradient(90deg,var(--ouro),var(--ouro-esc)); border-radius:99px;
+  transition:width .5s ease; min-width:0;}
+.regiao-cartao .pct{font-size:.75rem; font-weight:900; color:var(--texto2); margin-top:4px; display:block;}
+.faixa-mapa{background:linear-gradient(120deg,var(--azul) 0%, var(--azul-claro) 100%); color:#fff;
+  border-radius:20px; padding:18px 20px; margin-bottom:18px; box-shadow:0 4px 0 var(--azul-esc);}
+.faixa-mapa h2{margin:0 0 4px; color:var(--ouro-claro);}
+.faixa-mapa p{margin:0; font-weight:700; opacity:.95; font-size:.92rem;}
+
+/* ---------- Trilha ---------- */
+.trilha-cabecalho{display:flex; align-items:center; gap:12px; margin-bottom:8px;}
+.btn-voltar{background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--texto2); padding:6px;}
+.trilha{display:flex; flex-direction:column; align-items:center; gap:26px; padding:28px 0 40px; position:relative;}
+.no{width:76px; height:76px; border-radius:50%; border:none; cursor:pointer; font-size:1.9rem; position:relative;
+  background:var(--verde); box-shadow:0 6px 0 var(--verde-esc); transition:transform .1s; color:#fff;}
+.no:active{transform:translateY(4px) !important; box-shadow:none;}
+.no.concluido{background:var(--ouro); box-shadow:0 6px 0 var(--ouro-esc);}
+.no.bloqueado{background:var(--cinza); box-shadow:0 6px 0 var(--cinza-esc); cursor:not-allowed; filter:grayscale(1);}
+.no.atual{animation:flutuar 1.6s ease-in-out infinite;}
+.no.atual::before{content:"COMEÇAR"; position:absolute; top:-38px; left:50%; transform:translateX(-50%);
+  background:#fff; color:var(--verde); border:2px solid var(--cinza); padding:4px 10px; border-radius:10px;
+  font-size:.7rem; font-weight:900; font-family:'Nunito'; white-space:nowrap; letter-spacing:1px;}
+.no.oculta-rev{background:linear-gradient(135deg,#7B5CD6,#5C3FB8); box-shadow:0 6px 0 #45309B;
+  border:3px dashed var(--ouro); animation:revelar .8s ease both;}
+.no.oculta-rev.concluido{background:var(--ouro); border-style:solid;}
+@keyframes revelar{from{transform:scale(0) rotate(180deg); opacity:0;} to{transform:none; opacity:1;}}
+@keyframes flutuar{0%,100%{transform:translateY(0);} 50%{transform:translateY(-7px);}}
+.no .rotulo{position:absolute; top:82px; left:50%; transform:translateX(-50%); width:130px; font-size:.72rem;
+  font-weight:800; color:var(--texto2); font-family:'Nunito'; line-height:1.15;}
+.no.teste{width:88px; height:88px; background:var(--azul); box-shadow:0 6px 0 var(--azul-esc); border-radius:24px;}
+.no.teste.concluido{background:var(--ouro); box-shadow:0 6px 0 var(--ouro-esc);}
+.no-espaco{height:26px;}
+
+/* ---------- Lição ---------- */
+#tela-licao{justify-content:flex-start;}
+.licao-topo{width:100%; max-width:640px; display:flex; align-items:center; gap:12px; padding:18px 16px 6px;}
+.licao-topo .barra-prog{flex:1; height:16px;}
+.licao-topo .coracoes{font-weight:900; color:var(--verm); font-size:1.05rem; white-space:nowrap;}
+.licao-corpo{width:100%; max-width:640px; padding:10px 16px 170px; text-align:left; flex:1;}
+.pergunta{font-size:1.3rem; font-weight:900; margin:14px 0 18px; font-family:'Fredoka';}
+.opcoes{display:flex; flex-direction:column; gap:10px;}
+.opcao{background:#fff; border:2px solid var(--cinza); border-radius:14px; padding:14px 16px; font-size:1rem;
+  font-weight:800; cursor:pointer; text-align:left; box-shadow:0 3px 0 var(--cinza); transition:all .1s; color:var(--tinta);}
+.opcao:hover{background:#F0F6FD;}
+.opcao.selecionada{border-color:var(--azul); background:#E3F0FB; color:var(--azul); box-shadow:0 3px 0 var(--azul-claro);}
+.opcao.certa{border-color:var(--verde); background:#E9F9DC; color:var(--verde-esc);}
+.opcao.errada{border-color:var(--verm); background:#FFE8E8; color:var(--verm-esc); animation:tremer .3s;}
+.opcao.desativada{opacity:.4; pointer-events:none;}
+@keyframes tremer{0%,100%{transform:none;} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);}}
+.input-completar{width:100%; padding:16px; font-size:1.15rem; font-weight:800; border:2px solid var(--cinza);
+  border-radius:14px; font-family:inherit; color:var(--tinta); background:#fff;}
+.input-completar:focus{outline:none; border-color:var(--azul);}
+.fichas{display:flex; flex-wrap:wrap; gap:8px; min-height:56px; padding:10px; border-radius:14px;
+  border:2px dashed var(--cinza); margin-bottom:14px; background:#fff;}
+.ficha{background:#fff; border:2px solid var(--cinza); box-shadow:0 3px 0 var(--cinza); border-radius:12px;
+  padding:10px 16px; font-weight:800; cursor:pointer; font-size:1rem; color:var(--tinta);}
+.ficha:active{transform:translateY(3px); box-shadow:none;}
+.assoc-colunas{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.assoc-item{min-height:56px;}
+.assoc-item.escolhido{border-color:var(--azul); background:#E3F0FB;}
+.assoc-item.par-feito{border-color:var(--verde); background:#E9F9DC; color:var(--verde-esc); pointer-events:none; opacity:.75;}
+.rodape-licao{position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:2px solid var(--cinza);
+  padding:16px; z-index:60;}
+.rodape-licao .interno{max-width:640px; margin:0 auto; display:flex; gap:12px; align-items:center;}
+.rodape-licao.certo{background:#D7FFB8; border-color:var(--verde);}
+.rodape-licao.errado{background:#FFDFE0; border-color:var(--verm);}
+.feedback-texto{flex:1; text-align:left;}
+.feedback-texto strong{font-family:'Fredoka'; font-size:1.1rem; display:block;}
+.feedback-texto.ok{color:var(--verde-esc);} .feedback-texto.nok{color:var(--verm-esc);}
+.feedback-texto p{margin:2px 0 0; font-size:.88rem; font-weight:700;}
+.btn-dica{background:none; border:2px solid var(--cinza); border-radius:12px; padding:8px 12px; cursor:pointer;
+  font-weight:900; color:var(--texto2); font-size:.85rem;}
+
+/* ---------- Vitória ---------- */
+#tela-vitoria .tela-conteudo, #tela-semcoracoes .tela-conteudo{max-width:420px;}
+.emoji-grande{font-size:4.5rem; animation:flutuar 2s ease-in-out infinite; display:inline-block;}
+.recompensas{display:flex; gap:12px; justify-content:center; margin:22px 0;}
+.recompensa{background:#fff; border:2px solid var(--cinza); border-radius:16px; padding:14px 18px; min-width:92px;
+  box-shadow:0 4px 0 var(--cinza);}
+.recompensa .valor{font-family:'Fredoka'; font-size:1.5rem; font-weight:700;}
+.recompensa .nome{font-size:.7rem; font-weight:900; text-transform:uppercase; letter-spacing:1px; color:var(--texto2);}
+.confete{position:fixed; top:-20px; width:12px; height:12px; z-index:100; pointer-events:none;
+  animation:cair linear forwards;}
+@keyframes cair{to{transform:translateY(110vh) rotate(720deg);}}
+
+/* ---------- Biblioteca ---------- */
+.estante{display:flex; flex-direction:column; gap:12px;}
+.livro-cartao{display:flex; gap:14px; align-items:center; background:#fff; border:2px solid var(--cinza);
+  border-radius:16px; padding:14px; cursor:pointer; box-shadow:0 4px 0 var(--cinza); text-align:left; font-family:inherit;}
+.livro-capa{width:56px; height:72px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+  font-size:1.7rem; color:#fff; flex-shrink:0; box-shadow:inset -6px 0 0 rgba(0,0,0,.18);}
+.livro-info h3{margin:0 0 3px; font-size:1rem;}
+.livro-info p{margin:0; font-size:.8rem; color:var(--texto2); font-weight:700;}
+.etiqueta{display:inline-block; font-size:.65rem; font-weight:900; text-transform:uppercase; letter-spacing:1px;
+  padding:3px 8px; border-radius:8px; margin-top:6px;}
+.etiqueta.lido{background:#E9F9DC; color:var(--verde-esc);}
+.etiqueta.jogo{background:#EFE7FF; color:#5C3FB8;}
+.etiqueta.novo{background:var(--ouro-claro); color:#8a6d00;}
+.leitor{text-align:left; background:#fff; border:2px solid var(--cinza); border-radius:20px; padding:26px;
+  box-shadow:0 4px 0 var(--cinza); line-height:1.7; font-weight:600;}
+.leitor h2{margin-top:0;}
+.escolha-jogo{display:block; width:100%; margin:8px 0;}
+
+/* ---------- Loja / Ligas / Perfil ---------- */
+.item-loja{display:flex; align-items:center; gap:14px; background:#fff; border:2px solid var(--cinza);
+  border-radius:16px; padding:14px; box-shadow:0 4px 0 var(--cinza); margin-bottom:12px; text-align:left;}
+.item-loja .icone{font-size:2rem;}
+.item-loja .info{flex:1;}
+.item-loja h3{margin:0 0 2px; font-size:1rem;}
+.item-loja p{margin:0; font-size:.8rem; color:var(--texto2); font-weight:700;}
+.ranking{list-style:none; margin:0; padding:0;}
+.ranking li{display:flex; align-items:center; gap:12px; background:#fff; border:2px solid var(--cinza);
+  border-radius:14px; padding:12px 14px; margin-bottom:8px; font-weight:800;}
+.ranking li.eu{border-color:var(--azul); background:#E3F0FB; box-shadow:0 3px 0 var(--azul-claro);}
+.ranking .pos{width:28px; font-family:'Fredoka'; color:var(--texto2);}
+.ranking .xp-rank{margin-left:auto; color:var(--texto2); font-size:.85rem;}
+.medalhas{display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px;}
+.medalha{background:#fff; border:2px solid var(--cinza); border-radius:14px; padding:12px; text-align:center;}
+.medalha.bloqueada{filter:grayscale(1); opacity:.5;}
+.medalha .icone{font-size:1.8rem;}
+.medalha h4{margin:6px 0 2px; font-size:.85rem;}
+.medalha p{margin:0; font-size:.68rem; color:var(--texto2); font-weight:700;}
+.perfil-topo{display:flex; align-items:center; gap:16px; background:#fff; border:2px solid var(--cinza);
+  border-radius:20px; padding:18px; box-shadow:0 4px 0 var(--cinza); margin-bottom:16px; text-align:left;}
+.perfil-avatar{width:72px; height:72px; border-radius:50%; background:var(--ouro-claro); border:3px solid var(--ouro);
+  display:flex; align-items:center; justify-content:center; font-size:2.3rem;}
+.grade-stats{display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; margin-bottom:18px;}
+.stat-caixa{background:#fff; border:2px solid var(--cinza); border-radius:14px; padding:12px; text-align:center;}
+.stat-caixa .valor{font-family:'Fredoka'; font-size:1.4rem;}
+.stat-caixa .nome{font-size:.68rem; font-weight:900; text-transform:uppercase; color:var(--texto2); letter-spacing:1px;}
+.cert-cartao{display:flex; align-items:center; gap:12px; background:linear-gradient(120deg,#FFF9E3,#FFF1BF);
+  border:2px solid var(--ouro); border-radius:16px; padding:14px; margin-bottom:10px; box-shadow:0 4px 0 var(--ouro-esc);
+  cursor:pointer; width:100%; font-family:inherit; text-align:left;}
+#canvas-cert{width:100%; max-width:640px; border:2px solid var(--cinza); border-radius:14px; background:#fff;}
+
+/* ---------- Aviso flutuante (toast) ---------- */
+#toast{position:fixed; top:18px; left:50%; transform:translateX(-50%) translateY(-120px); z-index:200;
+  background:var(--tinta); color:#fff; font-weight:800; padding:14px 22px; border-radius:14px;
+  box-shadow:0 6px 20px rgba(0,0,0,.25); transition:transform .35s cubic-bezier(.2,1.4,.4,1); max-width:90vw; text-align:center;}
+#toast.visivel{transform:translateX(-50%) translateY(0);}
+
+/* ---------- Meta diária + combo + trilha com caminho ---------- */
+.meta-diaria{background:#fff; border:2px solid var(--cinza); border-radius:16px; padding:14px 16px;
+  box-shadow:0 4px 0 var(--cinza); margin-bottom:16px; text-align:left;}
+.meta-diaria .topo{display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px;}
+.meta-diaria .topo b{font-family:'Fredoka'; font-size:1rem;}
+.meta-diaria .topo span{font-size:.75rem; font-weight:900; color:var(--texto2);}
+.coracao-timer{font-size:.68rem; font-weight:800; color:var(--texto2); margin-left:4px;}
+.combo-badge{display:inline-flex; align-items:center; gap:4px; background:linear-gradient(120deg,#FFE066,#FFC800);
+  color:var(--tinta); font-weight:900; font-size:.75rem; padding:4px 10px; border-radius:999px;
+  animation:aparecer .3s ease both;}
+.trilha::before{content:""; position:absolute; top:40px; bottom:40px; left:50%; width:6px; margin-left:-3px;
+  background:repeating-linear-gradient(180deg, var(--cinza) 0 12px, transparent 12px 22px); border-radius:99px; z-index:0;}
+.trilha > *{position:relative; z-index:1;}
+.regiao-cartao.bloqueada{opacity:.55; filter:grayscale(.4); cursor:not-allowed;}
+.regiao-cartao.bloqueada:hover{transform:none;}
+.selo-cadeado{position:absolute; top:10px; right:10px; font-size:1.1rem;}
+.splash-colunas{position:absolute; inset:0; pointer-events:none; opacity:.18;
+  background:linear-gradient(90deg, transparent 8%, rgba(255,200,0,.15) 12%, transparent 16%),
+             linear-gradient(90deg, transparent 84%, rgba(255,200,0,.15) 88%, transparent 92%);}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TELA 1: SPLASH (a caverna) ============ -->
+<div class="tela ativa" id="tela-splash">
+  <div class="splash-colunas" aria-hidden="true"></div>
+  <div class="tela-conteudo">
+    <h1>PLATONIA</h1>
+    <div class="subtitulo">A TERRA DO SABER</div>
+    <p style="margin-top:26px;">Você está a um passo de sair da caverna!</p>
+    <button class="luz" id="botao-luz" aria-label="Tocar na luz para entrar"></button>
+    <div class="dica-luz">Toque na luz...</div>
+  </div>
+  <div class="sombras-caverna"></div>
+</div>
+
+<!-- ============ TELA 2: CADASTRO (passaporte) ============ -->
+<div class="tela" id="tela-cadastro">
+  <div class="tela-conteudo">
+    <h2 style="font-size:1.5rem;">Bem-vindo, novo cidadão de Platonia! 🏛️</h2>
+    <p style="color:var(--texto2); font-weight:700;">Vamos começar criando o seu passaporte:</p>
+    <div class="cartao passaporte">
+      <div style="text-align:center; font-family:'Fredoka'; font-weight:700; letter-spacing:2px; color:var(--ouro-esc);">✦ PASSAPORTE DE PLATONIA ✦</div>
+      <div class="campo">
+        <label for="campo-nome">Nome</label>
+        <input id="campo-nome" type="text" maxlength="40" placeholder="Como devemos te chamar?">
+        <div class="erro-msg" id="erro-nome">Digite um nome com pelo menos 2 letras.</div>
+      </div>
+      <div class="campo">
+        <label for="campo-email">E-mail</label>
+        <input id="campo-email" type="email" maxlength="80" placeholder="seu@email.com">
+        <div class="erro-msg" id="erro-email">Digite um e-mail válido.</div>
+      </div>
+      <div class="campo">
+        <label>Escolha seu retrato</label>
+        <div class="avatares" id="avatares-cadastro"></div>
+      </div>
+      <button class="btn btn-verde btn-largo" id="botao-emitir">Emitir passaporte</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TELA 3: VISTO + TUTORIAL ============ -->
+<div class="tela" id="tela-visto">
+  <div class="tela-conteudo">
+    <div id="visto-carimbo">
+      <div class="emoji-grande">📜</div>
+      <h2>Dados confirmados!</h2>
+      <div class="carimbo">Visto aprovado</div>
+      <p style="color:var(--texto2); font-weight:700; margin-top:18px;">Seu visto está pronto. Pode entrar!</p>
+      <button class="btn btn-azul btn-largo" id="botao-tutorial" style="margin-top:10px;">Continuar</button>
+    </div>
+    <div id="visto-tutorial" style="display:none;">
+      <div class="tutorial-passo ativo" data-passo="0">
+        <div class="emoji-grande">📚</div>
+        <h2>Comece espiando a Biblioteca</h2>
+        <p style="color:var(--texto2); font-weight:700;">Lá você encontra resumos de grandes obras e livros-jogo para se divertir enquanto aprende.</p>
+      </div>
+      <div class="tutorial-passo" data-passo="1">
+        <div class="emoji-grande">🗝️</div>
+        <h2>Livros abrem caminhos</h2>
+        <p style="color:var(--texto2); font-weight:700;">Ao terminar um livro, ele te conecta a uma nova área do mapa: um <strong>caminho oculto</strong> se revela na trilha!</p>
+      </div>
+      <div class="tutorial-passo" data-passo="2">
+        <div class="emoji-grande">🏛️</div>
+        <h2>Explore as trilhas</h2>
+        <p style="color:var(--texto2); font-weight:700;">Exemplo: um livro de Matemática libera exercícios bônus na trilha da <strong>Cidade da Matemática</strong>. E se quiser avançar rápido, faça o <strong>Teste da Seção</strong>!</p>
+      </div>
+      <div class="pontinhos" id="tutorial-pontinhos"><span class="ativo"></span><span></span><span></span></div>
+      <button class="btn btn-verde btn-largo" id="botao-passo">Próximo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SHELL DO APP (mapa, biblioteca, loja, ligas, perfil) ============ -->
+<div id="shell">
+  <div id="topbar" aria-label="Seus recursos">
+    <div class="stat" title="Ofensiva (dias seguidos)">🔥 <b id="stat-streak">0</b></div>
+    <div class="stat" title="Dracmas">🪙 <b id="stat-dracmas">0</b></div>
+    <div class="stat" title="Corações">❤️ <b id="stat-coracoes">5</b><span class="coracao-timer" id="stat-coracao-timer"></span></div>
+    <div class="stat" title="Experiência">⭐ <b id="stat-xp">0</b></div>
+  </div>
+  <main id="conteudo"></main>
+  <nav id="navbar" aria-label="Navegação principal">
+    <button class="nav-item ativo" data-dest="mapa">🗺️<span>Mapa</span></button>
+    <button class="nav-item" data-dest="biblioteca">📚<span>Biblioteca</span></button>
+    <button class="nav-item" data-dest="ligas">🏆<span>Ligas</span></button>
+    <button class="nav-item" data-dest="loja">🏺<span>Ágora</span></button>
+    <button class="nav-item" data-dest="perfil">👤<span>Perfil</span></button>
+  </nav>
+</div>
+
+<!-- ============ TELA DE LIÇÃO ============ -->
+<div class="tela" id="tela-licao">
+  <div class="licao-topo">
+    <button class="btn-voltar" id="botao-sair-licao" aria-label="Sair da lição">✕</button>
+    <div class="barra-prog"><div id="licao-progresso" style="width:0%"></div></div>
+    <div class="coracoes" id="licao-coracoes">❤️ 5</div>
+  </div>
+  <div class="licao-corpo" id="licao-corpo"></div>
+  <div class="rodape-licao" id="rodape-licao">
+    <div class="interno" id="rodape-interno">
+      <button class="btn-dica" id="botao-dica" style="display:none;">💡 Usar dica</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-verde" id="botao-verificar" disabled>Verificar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TELA DE VITÓRIA ============ -->
+<div class="tela" id="tela-vitoria">
+  <div class="tela-conteudo" id="vitoria-conteudo"></div>
+</div>
+
+<!-- ============ TELA SEM CORAÇÕES ============ -->
+<div class="tela" id="tela-semcoracoes">
+  <div class="tela-conteudo">
+    <div class="emoji-grande">💔</div>
+    <h2>Seus corações acabaram!</h2>
+    <p style="color:var(--texto2); font-weight:700;">Descanse na Biblioteca enquanto eles se recuperam (1 a cada 30 minutos) ou visite a Ágora para reabastecer.</p>
+    <button class="btn btn-azul btn-largo" id="botao-ir-biblioteca" style="margin-bottom:10px;">Ler na Biblioteca</button>
+    <button class="btn btn-ouro btn-largo" id="botao-ir-loja">Ir à Ágora 🏺</button>
+  </div>
+</div>
+
+<div id="toast" role="status"></div>
+
+<script>
+/* ############################################################
+   ###  EDITE O CONTEÚDO AQUI  ################################
+   Todo o conteúdo educacional de Platonia vive neste objeto.
+   Para adicionar matérias, lições, exercícios ou livros,
+   basta editar este JSON — nenhuma função precisa mudar.
+   Tipos de exercício:
+   - multipla_escolha: {pergunta, opcoes[], correta(indice), explicacao}
+   - verdadeiro_falso: {pergunta, correta(true/false), explicacao}
+   - completar:        {frase(com ___), resposta, explicacao}
+   - ordenar:          {pergunta, itens[], ordemCorreta[indices]}
+   - associar:         {pergunta, pares[[esq,dir],...]}
+   ############################################################ */
+const CONTEUDO_PLATONIA = {
+  regioes: [
+    {
+      id:"matematica", nome:"Cidade da Matemática", icone:"🏛️", cor:"#1C7AC4",
+      certificado:{ titulo:"Fundamentos de Matemática", cargaHoraria:"10h" },
+      secoes:[{ id:"sec1", titulo:"Fundamentos", licoes:[
+        { id:"mat_l1", titulo:"Números Naturais", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual destes é um número natural?", opcoes:["-3","4","1/2","√2"], correta:1, explicacao:"Os números naturais são 0, 1, 2, 3... — inteiros e não negativos." },
+          { tipo:"verdadeiro_falso", pergunta:"Todo número natural é também um número inteiro.", correta:true, explicacao:"Os naturais estão contidos no conjunto dos inteiros." },
+          { tipo:"completar", frase:"O sucessor de 9 é ___.", resposta:"10", explicacao:"O sucessor de um número natural é ele mesmo + 1." }
+        ]},
+        { id:"mat_l2", titulo:"Operações Básicas", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Quanto é 7 × 8?", opcoes:["54","56","64","48"], correta:1, explicacao:"7 × 8 = 56. Dica: 7 × 8 = 7 × 10 − 7 × 2." },
+          { tipo:"ordenar", pergunta:"Ordene do menor para o maior:", itens:["15","3","9"], ordemCorreta:[1,2,0] },
+          { tipo:"completar", frase:"25 ÷ 5 = ___.", resposta:"5", explicacao:"5 × 5 = 25, logo 25 ÷ 5 = 5." }
+        ]},
+        { id:"mat_l3", titulo:"Frações", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual fração equivale a 1/2?", opcoes:["2/6","3/4","2/4","1/3"], correta:2, explicacao:"2/4 simplificada (÷2) vira 1/2." },
+          { tipo:"verdadeiro_falso", pergunta:"3/4 é maior que 2/3.", correta:true, explicacao:"3/4 = 0,75 e 2/3 ≈ 0,66." },
+          { tipo:"associar", pergunta:"Associe cada fração ao seu valor decimal:", pares:[["1/2","0,5"],["1/4","0,25"],["3/4","0,75"]] }
+        ]},
+        { id:"mat_oculta", titulo:"Segredos de Pitágoras", oculta:true, desbloqueadaPorLivro:"livro_mat", exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Em um triângulo retângulo, a soma dos quadrados dos catetos é igual a...", opcoes:["c","c²","2c","b²"], correta:1, explicacao:"Teorema de Pitágoras: a² + b² = c², onde c é a hipotenusa." },
+          { tipo:"verdadeiro_falso", pergunta:"O Teorema de Pitágoras vale para qualquer triângulo.", correta:false, explicacao:"Ele vale apenas para triângulos retângulos." },
+          { tipo:"completar", frase:"Se os catetos medem 3 e 4, a hipotenusa mede ___.", resposta:"5", explicacao:"3² + 4² = 9 + 16 = 25 = 5²." }
+        ]}
+      ],
+      testeDaSecao:{ exercicios:[
+        { tipo:"multipla_escolha", pergunta:"Qual é o antecessor de 100?", opcoes:["101","99","90","98"], correta:1, explicacao:"Antecessor = número − 1." },
+        { tipo:"completar", frase:"9 × 6 = ___.", resposta:"54", explicacao:"9 × 6 = 54." },
+        { tipo:"verdadeiro_falso", pergunta:"1/3 é maior que 1/2.", correta:false, explicacao:"Quanto maior o denominador, menor a fração (com mesmo numerador)." },
+        { tipo:"ordenar", pergunta:"Ordene do menor para o maior:", itens:["0,75","0,25","0,5"], ordemCorreta:[1,2,0] },
+        { tipo:"multipla_escolha", pergunta:"Metade de 48 é...", opcoes:["22","26","24","28"], correta:2, explicacao:"48 ÷ 2 = 24." }
+      ]}}]
+    },
+    {
+      id:"artes", nome:"Viela das Artes", icone:"🎨", cor:"#E85D9E",
+      certificado:{ titulo:"Introdução às Artes", cargaHoraria:"8h" },
+      secoes:[{ id:"sec1", titulo:"Primeiras Pinceladas", licoes:[
+        { id:"art_l1", titulo:"O Mundo das Cores", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual destas é uma cor primária?", opcoes:["Verde","Azul","Roxo","Laranja"], correta:1, explicacao:"As cores primárias são vermelho, azul e amarelo." },
+          { tipo:"associar", pergunta:"Associe as misturas às cores resultantes:", pares:[["Azul + Amarelo","Verde"],["Vermelho + Azul","Roxo"],["Vermelho + Amarelo","Laranja"]] },
+          { tipo:"verdadeiro_falso", pergunta:"Branco e preto são consideradas cores neutras.", correta:true, explicacao:"Junto com o cinza, elas formam as cores neutras." }
+        ]},
+        { id:"art_l2", titulo:"Grandes Mestres", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Quem pintou a Mona Lisa?", opcoes:["Van Gogh","Leonardo da Vinci","Picasso","Monet"], correta:1, explicacao:"Leonardo da Vinci pintou a Mona Lisa no século XVI." },
+          { tipo:"verdadeiro_falso", pergunta:"Picasso foi um dos fundadores do Cubismo.", correta:true, explicacao:"Picasso e Braque criaram o movimento cubista." },
+          { tipo:"completar", frase:"A arte de criar formas em pedra, madeira ou argila chama-se ___.", resposta:"escultura", explicacao:"A escultura é uma das artes mais antigas da humanidade." }
+        ]},
+        { id:"art_oculta", titulo:"Mitos nas Telas", oculta:true, desbloqueadaPorLivro:"livro_artes", exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual cena mitológica Botticelli pintou?", opcoes:["O Nascimento de Vênus","A Queda de Ícaro","O Voo de Hermes","A Forja de Vulcano"], correta:0, explicacao:"'O Nascimento de Vênus' é a obra-prima de Botticelli." },
+          { tipo:"verdadeiro_falso", pergunta:"A arte grega antiga buscava a proporção e a harmonia ideais.", correta:true, explicacao:"Os gregos buscavam o belo ideal através da proporção." }
+        ]}
+      ],
+      testeDaSecao:{ exercicios:[
+        { tipo:"multipla_escolha", pergunta:"Vermelho, azul e amarelo são cores...", opcoes:["Secundárias","Neutras","Primárias","Frias"], correta:2, explicacao:"São as primárias: não nascem de misturas." },
+        { tipo:"verdadeiro_falso", pergunta:"Monet foi um pintor impressionista.", correta:true, explicacao:"O nome do movimento vem de sua obra 'Impressão, nascer do sol'." },
+        { tipo:"associar", pergunta:"Associe o artista à obra:", pares:[["Da Vinci","Mona Lisa"],["Van Gogh","Noite Estrelada"],["Munch","O Grito"]] },
+        { tipo:"completar", frase:"A mistura de azul e amarelo resulta na cor ___.", resposta:"verde", explicacao:"Azul + amarelo = verde." }
+      ]}}]
+    },
+    {
+      id:"filosofia", nome:"Praça da Filosofia", icone:"🦉", cor:"#7B5CD6",
+      certificado:{ titulo:"Introdução à Filosofia", cargaHoraria:"8h" },
+      secoes:[{ id:"sec1", titulo:"Saindo da Caverna", licoes:[
+        { id:"fil_l1", titulo:"A Caverna de Platão", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Na alegoria da caverna, os prisioneiros enxergam apenas...", opcoes:["o sol","sombras na parede","estátuas","o mar"], correta:1, explicacao:"Eles veem só as sombras projetadas, que confundem com a realidade." },
+          { tipo:"verdadeiro_falso", pergunta:"Sair da caverna representa alcançar o conhecimento verdadeiro.", correta:true, explicacao:"A luz do sol simboliza a verdade e o mundo das ideias." },
+          { tipo:"completar", frase:"Platão foi discípulo de ___.", resposta:"Sócrates", explicacao:"Sócrates foi mestre de Platão, que foi mestre de Aristóteles." }
+        ]},
+        { id:"fil_l2", titulo:"Grandes Pensadores", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"associar", pergunta:"Associe o filósofo à sua ideia famosa:", pares:[["Sócrates","Só sei que nada sei"],["Descartes","Penso, logo existo"],["Aristóteles","O homem é um animal político"]] },
+          { tipo:"multipla_escolha", pergunta:"Quem escreveu 'A República'?", opcoes:["Aristóteles","Platão","Sócrates","Epicuro"], correta:1, explicacao:"'A República' é a obra mais famosa de Platão — e contém a alegoria da caverna!" },
+          { tipo:"verdadeiro_falso", pergunta:"A palavra 'filosofia' significa 'amor à sabedoria'.", correta:true, explicacao:"Do grego: philos (amor) + sophia (sabedoria)." }
+        ]},
+        { id:"fil_oculta", titulo:"O Julgamento de Sócrates", oculta:true, desbloqueadaPorLivro:"livro_filo", exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Sócrates foi condenado a beber...", opcoes:["vinho","cicuta","hidromel","água do Letes"], correta:1, explicacao:"Condenado por 'corromper a juventude', bebeu o veneno cicuta." },
+          { tipo:"verdadeiro_falso", pergunta:"Sócrates deixou muitos livros escritos.", correta:false, explicacao:"Sócrates nada escreveu: conhecemos suas ideias pelos diálogos de Platão." }
+        ]}
+      ],
+      testeDaSecao:{ exercicios:[
+        { tipo:"multipla_escolha", pergunta:"O que as sombras representam na alegoria da caverna?", opcoes:["A verdade","As aparências enganosas","O futuro","Os sonhos"], correta:1, explicacao:"As sombras são as aparências que tomamos por realidade." },
+        { tipo:"completar", frase:"O método de perguntas de Sócrates chama-se ___.", resposta:"maiêutica", explicacao:"A maiêutica é a arte de 'dar à luz' ideias por meio de perguntas." },
+        { tipo:"verdadeiro_falso", pergunta:"Aristóteles foi aluno de Platão.", correta:true, explicacao:"Ele estudou por 20 anos na Academia de Platão." },
+        { tipo:"multipla_escolha", pergunta:"A filosofia nasceu na...", opcoes:["Roma Antiga","Grécia Antiga","China","Pérsia"], correta:1, explicacao:"A filosofia ocidental nasceu na Grécia, por volta do século VI a.C." }
+      ]}}]
+    },
+    {
+      id:"historia", nome:"Beco da História", icone:"📜", cor:"#C97B2D",
+      certificado:{ titulo:"Panorama de História", cargaHoraria:"8h" },
+      secoes:[{ id:"sec1", titulo:"Ecos do Passado", licoes:[
+        { id:"his_l1", titulo:"Grécia Antiga", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual cidade grega é considerada o berço da democracia?", opcoes:["Esparta","Atenas","Tebas","Corinto"], correta:1, explicacao:"Em Atenas os cidadãos votavam diretamente nas decisões da pólis." },
+          { tipo:"verdadeiro_falso", pergunta:"Os Jogos Olímpicos nasceram na Grécia Antiga.", correta:true, explicacao:"Eram realizados em Olímpia, em honra a Zeus." },
+          { tipo:"completar", frase:"O conjunto de templos no alto de Atenas chama-se ___.", resposta:"Acrópole", explicacao:"Acrópole significa 'cidade alta' — lá fica o Partenon." }
+        ]},
+        { id:"his_l2", titulo:"Brasil: Colônia e Império", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Em que ano os portugueses chegaram ao Brasil?", opcoes:["1500","1492","1550","1822"], correta:0, explicacao:"A esquadra de Cabral chegou em 22 de abril de 1500." },
+          { tipo:"verdadeiro_falso", pergunta:"A independência do Brasil foi proclamada em 1822.", correta:true, explicacao:"Dom Pedro I proclamou a independência em 7 de setembro de 1822." },
+          { tipo:"ordenar", pergunta:"Ordene os eventos do mais antigo ao mais recente:", itens:["Independência","Chegada de Cabral","Proclamação da República"], ordemCorreta:[1,0,2] }
+        ]},
+        { id:"his_oculta", titulo:"A Guerra de Troia", oculta:true, desbloqueadaPorLivro:"livro_hist", exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual estratégia encerrou a Guerra de Troia?", opcoes:["Um cerco de 50 anos","O cavalo de madeira","Um acordo de paz","Uma tempestade"], correta:1, explicacao:"Os gregos se esconderam dentro do cavalo oferecido como presente." },
+          { tipo:"verdadeiro_falso", pergunta:"A Ilíada é atribuída ao poeta Homero.", correta:true, explicacao:"Homero também é o autor atribuído da Odisseia." }
+        ]}
+      ],
+      testeDaSecao:{ exercicios:[
+        { tipo:"multipla_escolha", pergunta:"O que era a ágora nas cidades gregas?", opcoes:["Um templo","A praça pública central","Um navio","Uma moeda"], correta:1, explicacao:"A ágora era o coração político e comercial da pólis." },
+        { tipo:"completar", frase:"A República do Brasil foi proclamada no ano de ___.", resposta:"1889", explicacao:"Em 15 de novembro de 1889." },
+        { tipo:"verdadeiro_falso", pergunta:"Esparta era famosa por sua educação voltada à guerra.", correta:true, explicacao:"A educação espartana formava soldados desde a infância." },
+        { tipo:"multipla_escolha", pergunta:"Quem proclamou a independência do Brasil?", opcoes:["Dom Pedro II","Dom João VI","Dom Pedro I","Marechal Deodoro"], correta:2, explicacao:"Dom Pedro I, às margens do rio Ipiranga." }
+      ]}}]
+    },
+    {
+      id:"gramatica", nome:"Esquina da Gramática", icone:"✍️", cor:"#2FA88C",
+      certificado:{ titulo:"Gramática Essencial", cargaHoraria:"8h" },
+      secoes:[{ id:"sec1", titulo:"Palavras em Ordem", licoes:[
+        { id:"gra_l1", titulo:"Classes de Palavras", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual destas palavras é um verbo?", opcoes:["casa","correr","azul","rápido"], correta:1, explicacao:"Verbos indicam ação, estado ou fenômeno — 'correr' é uma ação." },
+          { tipo:"associar", pergunta:"Associe a classe à palavra:", pares:[["Substantivo","livro"],["Adjetivo","bonito"],["Verbo","estudar"]] },
+          { tipo:"verdadeiro_falso", pergunta:"Advérbios podem modificar verbos.", correta:true, explicacao:"Ex.: 'Ela corre rapidamente' — o advérbio modifica o verbo." }
+        ]},
+        { id:"gra_l2", titulo:"Ortografia", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual é a grafia correta?", opcoes:["exceção","excessão","eceção","exseção"], correta:0, explicacao:"'Exceção' se escreve com xc e ç." },
+          { tipo:"completar", frase:"O plural de 'cidadão' é ___.", resposta:"cidadãos", explicacao:"Cidadão → cidadãos (e não 'cidadães')." },
+          { tipo:"verdadeiro_falso", pergunta:"'Mas' e 'mais' significam a mesma coisa.", correta:false, explicacao:"'Mas' indica oposição; 'mais' indica quantidade." }
+        ]},
+        { id:"gra_oculta", titulo:"Figuras de Linguagem", oculta:true, desbloqueadaPorLivro:"livro_gram", exercicios:[
+          { tipo:"multipla_escolha", pergunta:"'Aquele rapaz é uma rocha' é um exemplo de...", opcoes:["Hipérbole","Metáfora","Ironia","Onomatopeia"], correta:1, explicacao:"Metáfora: comparação implícita, sem 'como'." },
+          { tipo:"associar", pergunta:"Associe a figura ao exemplo:", pares:[["Hipérbole","Chorei rios de lágrimas"],["Onomatopeia","O relógio faz tic-tac"],["Comparação","Forte como um touro"]] }
+        ]}
+      ],
+      testeDaSecao:{ exercicios:[
+        { tipo:"multipla_escolha", pergunta:"Qual palavra é um adjetivo?", opcoes:["felicidade","correr","generoso","ontem"], correta:2, explicacao:"'Generoso' qualifica um substantivo." },
+        { tipo:"completar", frase:"O plural de 'pão' é ___.", resposta:"pães", explicacao:"Pão → pães." },
+        { tipo:"verdadeiro_falso", pergunta:"Toda frase precisa ter verbo para ser uma oração.", correta:true, explicacao:"A oração se organiza em torno de um verbo." },
+        { tipo:"multipla_escolha", pergunta:"Qual está correta?", opcoes:["Fazem dois anos que estudo","Faz dois anos que estudo","Fazem-se dois anos que estudo","Fazem dois ano que estudo"], correta:1, explicacao:"'Fazer' indicando tempo é impessoal: fica no singular." }
+      ]}}]
+    },
+    {
+      id:"saude", nome:"Vila da Saúde", icone:"🌿", cor:"#58CC02",
+      certificado:{ titulo:"Noções de Saúde e Bem-estar", cargaHoraria:"6h" },
+      secoes:[{ id:"sec1", titulo:"Corpo São", licoes:[
+        { id:"sau_l1", titulo:"Alimentação Saudável", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual destes alimentos é uma boa fonte de proteína?", opcoes:["Arroz","Feijão","Alface","Maçã"], correta:1, explicacao:"O feijão é rico em proteínas vegetais e ferro." },
+          { tipo:"verdadeiro_falso", pergunta:"Beber água regularmente ajuda o corpo a funcionar bem.", correta:true, explicacao:"A hidratação é essencial para praticamente todas as funções do corpo." },
+          { tipo:"completar", frase:"A vitamina que o corpo produz com a ajuda do sol é a vitamina ___.", resposta:"D", explicacao:"A vitamina D é sintetizada na pele com a luz solar." }
+        ]},
+        { id:"sau_l2", titulo:"O Corpo Humano", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual órgão bombeia o sangue pelo corpo?", opcoes:["Pulmão","Fígado","Coração","Rim"], correta:2, explicacao:"O coração bate cerca de 100 mil vezes por dia!" },
+          { tipo:"associar", pergunta:"Associe o órgão à sua função:", pares:[["Pulmões","Respiração"],["Coração","Circulação"],["Cérebro","Pensamento"]] },
+          { tipo:"verdadeiro_falso", pergunta:"O corpo humano adulto tem 206 ossos.", correta:true, explicacao:"Bebês nascem com cerca de 300, que se fundem com o tempo." }
+        ]},
+        { id:"sau_oculta", titulo:"Hipócrates e a Medicina", oculta:true, desbloqueadaPorLivro:"livro_saude", exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Hipócrates é conhecido como o pai da...", opcoes:["Filosofia","Medicina","Matemática","Astronomia"], correta:1, explicacao:"O 'Juramento de Hipócrates' é feito por médicos até hoje." },
+          { tipo:"verdadeiro_falso", pergunta:"Hipócrates defendia que as doenças tinham causas naturais, não divinas.", correta:true, explicacao:"Essa ideia fundou a medicina como ciência." }
+        ]}
+      ],
+      testeDaSecao:{ exercicios:[
+        { tipo:"multipla_escolha", pergunta:"Quantas horas de sono são recomendadas para adultos?", opcoes:["3 a 4","5 a 6","7 a 9","12 ou mais"], correta:2, explicacao:"De 7 a 9 horas por noite, em média." },
+        { tipo:"verdadeiro_falso", pergunta:"Praticar exercícios físicos faz bem também para a mente.", correta:true, explicacao:"Exercícios liberam endorfinas e reduzem o estresse." },
+        { tipo:"completar", frase:"O órgão responsável por filtrar o sangue e produzir a urina é o ___.", resposta:"rim", explicacao:"Os rins filtram cerca de 180 litros de sangue por dia." },
+        { tipo:"multipla_escolha", pergunta:"Qual grupo alimentar é a principal fonte de energia?", opcoes:["Carboidratos","Vitaminas","Minerais","Fibras"], correta:0, explicacao:"Carboidratos são o 'combustível' preferido do corpo." }
+      ]}}]
+    },
+    {
+      id:"tecnologia", nome:"Parque Tecnológico", icone:"💻", cor:"#455A75",
+      certificado:{ titulo:"Fundamentos de Tecnologia", cargaHoraria:"8h" },
+      secoes:[{ id:"sec1", titulo:"Mundo Digital", licoes:[
+        { id:"tec_l1", titulo:"Como Funciona um Computador", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual componente é considerado o 'cérebro' do computador?", opcoes:["HD","Processador","Teclado","Monitor"], correta:1, explicacao:"O processador (CPU) executa os cálculos e instruções." },
+          { tipo:"verdadeiro_falso", pergunta:"A internet é uma rede que conecta computadores no mundo todo.", correta:true, explicacao:"É uma 'rede de redes' global." },
+          { tipo:"completar", frase:"Programas criados para causar danos ao computador são chamados de ___.", resposta:"vírus", explicacao:"Vírus são um tipo de malware — por isso usamos antivírus." }
+        ]},
+        { id:"tec_l2", titulo:"Pensamento de Programador", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"O que é um algoritmo?", opcoes:["Um tipo de vírus","Uma sequência de passos para resolver um problema","Uma peça do computador","Um site"], correta:1, explicacao:"Como uma receita de bolo: passos ordenados até o resultado." },
+          { tipo:"ordenar", pergunta:"Ordene o algoritmo para fazer um suco:", itens:["Beber o suco","Cortar a fruta","Bater no liquidificador"], ordemCorreta:[1,2,0] },
+          { tipo:"verdadeiro_falso", pergunta:"Computadores entendem, no nível mais básico, apenas 0 e 1.", correta:true, explicacao:"É o sistema binário, a linguagem das máquinas." }
+        ]},
+        { id:"tec_oculta", titulo:"A Máquina de Turing", oculta:true, desbloqueadaPorLivro:"livro_tec", exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Alan Turing é considerado um dos pais da...", opcoes:["Biologia","Computação","Química","Arquitetura"], correta:1, explicacao:"Sua 'máquina universal' teórica fundou a ciência da computação." },
+          { tipo:"verdadeiro_falso", pergunta:"Turing ajudou a decifrar códigos secretos na Segunda Guerra Mundial.", correta:true, explicacao:"Ele ajudou a quebrar a máquina Enigma." }
+        ]}
+      ],
+      testeDaSecao:{ exercicios:[
+        { tipo:"multipla_escolha", pergunta:"O que significa 'salvar na nuvem'?", opcoes:["Guardar no HD","Guardar em servidores acessados pela internet","Imprimir o arquivo","Apagar o arquivo"], correta:1, explicacao:"A 'nuvem' são servidores remotos acessíveis de qualquer lugar." },
+        { tipo:"verdadeiro_falso", pergunta:"Uma senha forte deve misturar letras, números e símbolos.", correta:true, explicacao:"Quanto mais variada e longa, mais difícil de descobrir." },
+        { tipo:"completar", frase:"A sigla 'IA' significa Inteligência ___.", resposta:"artificial", explicacao:"IA: sistemas que simulam capacidades da inteligência humana." },
+        { tipo:"ordenar", pergunta:"Ordene os passos para navegar até um site:", itens:["Ler a página","Abrir o navegador","Digitar o endereço"], ordemCorreta:[1,2,0] }
+      ]}}]
+    },
+    {
+      id:"ciencias", nome:"Laboratório de Ciências", icone:"🔬", cor:"#00A6C4",
+      certificado:{ titulo:"Ciências da Natureza", cargaHoraria:"8h" },
+      secoes:[{ id:"sec1", titulo:"Descobrindo o Mundo", licoes:[
+        { id:"cie_l1", titulo:"O Sistema Solar", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Qual é o planeta mais próximo do Sol?", opcoes:["Vênus","Mercúrio","Terra","Marte"], correta:1, explicacao:"Mercúrio é o menor planeta e o mais próximo do Sol." },
+          { tipo:"verdadeiro_falso", pergunta:"A Terra leva cerca de 365 dias para dar uma volta ao redor do Sol.", correta:true, explicacao:"Esse movimento chama-se translação e define o ano." },
+          { tipo:"completar", frase:"O satélite natural da Terra é a ___.", resposta:"Lua", explicacao:"A Lua influencia as marés dos oceanos." }
+        ]},
+        { id:"cie_l2", titulo:"Estados da Matéria", oculta:false, desbloqueadaPorLivro:null, exercicios:[
+          { tipo:"associar", pergunta:"Associe o estado da matéria ao exemplo:", pares:[["Sólido","Gelo"],["Líquido","Água"],["Gasoso","Vapor"]] },
+          { tipo:"verdadeiro_falso", pergunta:"A evaporação transforma líquido em gás.", correta:true, explicacao:"É o que acontece com a água da roupa no varal." },
+          { tipo:"multipla_escolha", pergunta:"A passagem do sólido para o líquido chama-se...", opcoes:["Fusão","Solidificação","Condensação","Sublimação"], correta:0, explicacao:"Fusão: como o gelo derretendo." }
+        ]},
+        { id:"cie_oculta", titulo:"A Evolução das Espécies", oculta:true, desbloqueadaPorLivro:"livro_cien", exercicios:[
+          { tipo:"multipla_escolha", pergunta:"Quem propôs a teoria da evolução por seleção natural?", opcoes:["Newton","Darwin","Einstein","Galileu"], correta:1, explicacao:"Charles Darwin, no livro 'A Origem das Espécies' (1859)." },
+          { tipo:"verdadeiro_falso", pergunta:"Na seleção natural, sobrevivem os mais adaptados ao ambiente.", correta:true, explicacao:"Características vantajosas passam às próximas gerações." }
+        ]}
+      ],
+      testeDaSecao:{ exercicios:[
+        { tipo:"multipla_escolha", pergunta:"Qual gás os seres humanos precisam respirar para viver?", opcoes:["Gás carbônico","Oxigênio","Hélio","Nitrogênio puro"], correta:1, explicacao:"O oxigênio é usado pelas células para gerar energia." },
+        { tipo:"verdadeiro_falso", pergunta:"As plantas produzem seu alimento pela fotossíntese.", correta:true, explicacao:"Usam luz, água e gás carbônico para produzir glicose." },
+        { tipo:"completar", frase:"A força que nos mantém presos ao chão chama-se ___.", resposta:"gravidade", explicacao:"Descrita por Newton ao observar... uma maçã!" },
+        { tipo:"associar", pergunta:"Associe o cientista à sua descoberta:", pares:[["Newton","Gravidade"],["Darwin","Evolução"],["Fleming","Penicilina"]] }
+      ]}}]
+    }
+  ],
+
+  biblioteca: [
+    { id:"livro_mat", titulo:"Os Elementos, de Euclides", tipo:"resumo", icone:"📐", cor:"#1C7AC4", regiaoRelacionada:"matematica", desbloqueiaLicao:"mat_oculta",
+      conteudo:"Escrito por volta de 300 a.C., 'Os Elementos' é um dos livros mais influentes da história. Euclides organizou todo o conhecimento matemático de seu tempo em 13 volumes, partindo de definições e axiomas simples para demonstrar centenas de teoremas, passo a passo.\n\nÉ nesse método — provar cada afirmação a partir das anteriores — que nasce a ideia de demonstração matemática. A geometria que estudamos na escola até hoje é chamada de 'geometria euclidiana' em sua homenagem.\n\nEntre os resultados reunidos por Euclides está o famoso Teorema de Pitágoras, que relaciona os lados de um triângulo retângulo e tem aplicações em construção, navegação e tecnologia até hoje." },
+    { id:"livro_filo", titulo:"A República, de Platão", tipo:"resumo", icone:"🦉", cor:"#7B5CD6", regiaoRelacionada:"filosofia", desbloqueiaLicao:"fil_oculta",
+      conteudo:"Nesta obra, Platão imagina como seria uma cidade perfeitamente justa. Por meio de diálogos conduzidos por Sócrates, discute justiça, educação, política e a natureza do conhecimento.\n\nÉ aqui que aparece a famosa alegoria da caverna: prisioneiros acorrentados veem apenas sombras na parede e acreditam que elas são toda a realidade. Quando um deles se liberta e sai à luz do sol, descobre um mundo muito maior — e sente o dever de voltar e libertar os outros.\n\nPara Platão, esse é o papel do conhecimento: nos libertar das aparências. É essa história que inspira Platonia — e o seu passaporte para fora da caverna!" },
+    { id:"livro_hist", titulo:"Ilíada, de Homero", tipo:"resumo", icone:"⚔️", cor:"#C97B2D", regiaoRelacionada:"historia", desbloqueiaLicao:"his_oculta",
+      conteudo:"A Ilíada é um poema épico grego que narra os últimos momentos da Guerra de Troia, travada entre gregos e troianos. No centro da história está a fúria do herói Aquiles e seu duelo contra Heitor, o maior guerreiro de Troia.\n\nMais do que batalhas, o poema fala de honra, destino, amizade e das relações entre homens e deuses, que interferem na guerra o tempo todo.\n\nA guerra termina com a célebre estratégia do cavalo de madeira — narrada em detalhes na Odisseia e na Eneida — quando soldados gregos escondidos dentro do 'presente' abrem os portões da cidade durante a noite." },
+    { id:"livro_cien", titulo:"A Origem das Espécies, de Darwin", tipo:"resumo", icone:"🐢", cor:"#00A6C4", regiaoRelacionada:"ciencias", desbloqueiaLicao:"cie_oculta",
+      conteudo:"Publicado em 1859, este livro mudou para sempre a biologia. Após viajar pelo mundo no navio Beagle e observar variações entre espécies — como os famosos tentilhões de Galápagos — Charles Darwin propôs a teoria da evolução por seleção natural.\n\nA ideia central: os indivíduos mais adaptados ao ambiente têm mais chances de sobreviver e deixar descendentes, transmitindo suas características. Ao longo de milhões de anos, esse processo dá origem a novas espécies.\n\nA teoria da evolução é hoje um dos pilares de toda a ciência da vida, da medicina à agricultura." },
+    { id:"livro_artes", titulo:"A Primavera de Botticelli", tipo:"resumo", icone:"🌸", cor:"#E85D9E", regiaoRelacionada:"artes", desbloqueiaLicao:"art_oculta",
+      conteudo:"Sandro Botticelli foi um dos grandes mestres do Renascimento italiano. Suas obras mais famosas, 'A Primavera' e 'O Nascimento de Vênus', trouxeram os mitos gregos e romanos de volta ao centro da arte europeia.\n\nNo Renascimento, artistas redescobriram a cultura clássica: a busca pela proporção, pela harmonia e pela beleza ideal dos antigos gregos. A mitologia virou tema de pinturas, esculturas e poemas.\n\nObservar essas obras é uma viagem dupla: para a Itália do século XV e para a Grécia antiga que a inspirou." },
+    { id:"livro_gram", titulo:"O Poder das Palavras", tipo:"resumo", icone:"🖋️", cor:"#2FA88C", regiaoRelacionada:"gramatica", desbloqueiaLicao:"gra_oculta",
+      conteudo:"Desde os oradores da Grécia antiga, sabemos que as palavras têm poder: convencem, emocionam, transformam. A retórica — arte de falar bem — era ensinada como disciplina fundamental para a vida na pólis.\n\nAs figuras de linguagem são as ferramentas desse poder: a metáfora compara sem dizer que compara ('aquele rapaz é uma rocha'), a hipérbole exagera de propósito ('chorei rios de lágrimas'), a onomatopeia imita sons ('tic-tac').\n\nDominar essas figuras deixa qualquer texto — e qualquer conversa — mais vivo e expressivo." },
+    { id:"livro_saude", titulo:"O Juramento de Hipócrates", tipo:"resumo", icone:"⚕️", cor:"#58CC02", regiaoRelacionada:"saude", desbloqueiaLicao:"sau_oculta",
+      conteudo:"Hipócrates viveu na Grécia por volta de 400 a.C. e é chamado de 'pai da medicina'. Sua grande revolução foi defender que as doenças têm causas naturais — alimentação, ambiente, hábitos — e não castigos dos deuses.\n\nEle e seus discípulos observavam os pacientes com cuidado, registravam sintomas e defendiam a ética no cuidado com o doente. O 'Juramento de Hipócrates', com compromissos de ética e respeito, é prestado por médicos até hoje, mais de dois mil anos depois.\n\nSua lição continua atual: prevenir, observar e cuidar do corpo como um todo." },
+    { id:"livro_tec", titulo:"Turing e a Máquina Universal", tipo:"resumo", icone:"🔐", cor:"#455A75", regiaoRelacionada:"tecnologia", desbloqueiaLicao:"tec_oculta",
+      conteudo:"Em 1936, o matemático inglês Alan Turing imaginou uma máquina teórica capaz de executar qualquer cálculo, desde que recebesse as instruções certas: a 'máquina universal'. Essa ideia é a base de todos os computadores modernos.\n\nDurante a Segunda Guerra Mundial, Turing liderou a equipe que quebrou a Enigma, a máquina de códigos secretos alemã — um feito que ajudou a encurtar a guerra.\n\nEle também propôs o famoso 'Teste de Turing': se uma máquina conversar de forma indistinguível de um humano, poderíamos dizer que ela 'pensa'? A pergunta segue viva na era da inteligência artificial." },
+    { id:"livrojogo_caverna", titulo:"A Fuga da Caverna (livro-jogo)", tipo:"livro_jogo", icone:"🕯️", cor:"#16324F", regiaoRelacionada:"filosofia", desbloqueiaLicao:null,
+      paginas:[
+        { texto:"Você acorda acorrentado numa caverna escura. Diante de você, sombras dançam na parede de pedra. Ao seu lado, outros prisioneiros as observam fascinados, dando nomes a cada uma. De repente, você percebe que suas correntes estão frouxas...", escolhas:[ {texto:"Soltar-se e olhar para trás", vaiPara:1}, {texto:"Continuar observando as sombras", vaiPara:2} ] },
+        { texto:"Você se liberta e se vira. Atrás de todos, uma fogueira arde, e entre ela e os prisioneiros, figuras carregam estátuas — são elas que projetam as sombras! Tudo o que você conhecia era apenas projeção. Mais adiante, uma passagem sobe em direção a uma luz intensa.", escolhas:[ {texto:"Subir em direção à luz", vaiPara:3}, {texto:"Voltar ao seu lugar, com medo", vaiPara:2} ] },
+        { texto:"Você permanece nas sombras. Os dias passam iguais, e as sombras continuam sendo o seu mundo inteiro. Algo dentro de você, porém, sussurra que existe mais... (Fim — mas você pode recomeçar e escolher outro caminho!)", escolhas:[ {texto:"Recomeçar a jornada", vaiPara:0} ] },
+        { texto:"A subida é difícil e a luz machuca seus olhos. Aos poucos, você enxerga: primeiro reflexos na água, depois as árvores, os animais e, por fim, o próprio Sol. O mundo verdadeiro é imenso e belo. Você pensa nos que ficaram lá embaixo.", escolhas:[ {texto:"Voltar para libertar os outros", vaiPara:4}, {texto:"Ficar vivendo sob o sol", vaiPara:5} ] },
+        { texto:"Você desce de volta à escuridão. Os prisioneiros zombam: 'A subida estragou seus olhos!' Alguns até se irritam. Mas uma jovem presta atenção às suas palavras e testa as próprias correntes... Você plantou a semente do conhecimento. FIM — Platão ficaria orgulhoso: para ele, esse é o dever do sábio! 🏆", escolhas:[ {texto:"Ler novamente", vaiPara:0} ] },
+        { texto:"Você vive sob o sol, mas a lembrança dos que ficaram pesa no coração. O conhecimento que não se compartilha fica incompleto. Talvez ainda haja tempo de voltar... FIM — que tal tentar o outro caminho?", escolhas:[ {texto:"Recomeçar a jornada", vaiPara:0} ] }
+      ] }
+  ]
+};
+
+/* ############################################################
+   ###  NÚCLEO DO APP — não é preciso editar daqui para baixo
+   ############################################################ */
+
+/* ---------- Constantes ---------- */
+const CHAVE_SAVE = "platonia_save_v2";
+const AVATARES_BASE = ["🦉","🏺","📜","⚱️"];
+const MEIA_HORA = 30 * 60 * 1000;
+const META_DIARIA_XP = 30;
+const REGIOES_INICIAIS = ["filosofia","matematica","gramatica"];
+const ITENS_LOJA = [
+  { id:"refil",  icone:"❤️", nome:"Refil de corações", desc:"Recupera todos os 5 corações.", preco:30 },
+  { id:"gelo",   icone:"🧊", nome:"Congelamento de ofensiva", desc:"Protege sua ofensiva por 1 dia sem estudar (máx. 2).", preco:60 },
+  { id:"dica",   icone:"💡", nome:"Dica de Atena", desc:"Elimina 2 opções erradas em uma questão de múltipla escolha.", preco:15 },
+  { id:"traje_hoplita", icone:"🛡️", nome:"Retrato: Hoplita", desc:"Um novo retrato de guerreiro para seu passaporte.", preco:100, traje:true },
+  { id:"traje_rei", icone:"👑", nome:"Retrato: Rei Filósofo", desc:"O retrato mais nobre de Platonia.", preco:100, traje:true }
+];
+const BOTS_LIGA = [
+  {nome:"Sócrates", avatar:"🧔", xp:920}, {nome:"Hipátia", avatar:"👩‍🏫", xp:780},
+  {nome:"Pitágoras", avatar:"📐", xp:640}, {nome:"Aristóteles", avatar:"📚", xp:510},
+  {nome:"Diógenes", avatar:"🏺", xp:430}, {nome:"Safo", avatar:"🎼", xp:350},
+  {nome:"Heráclito", avatar:"🌊", xp:260}, {nome:"Epicuro", avatar:"🍇", xp:180},
+  {nome:"Tales", avatar:"🌟", xp:90}
+];
+const CONQUISTAS = [
+  { id:"primeiro_passo", icone:"🥇", nome:"Primeiro Passo", desc:"Complete sua primeira lição.", cond:e=>totalLicoesConcluidas()>=1 },
+  { id:"filosofo_iniciante", icone:"🦉", nome:"Filósofo Iniciante", desc:"Complete 5 lições.", cond:e=>totalLicoesConcluidas()>=5 },
+  { id:"sabio_de_atenas", icone:"🏛️", nome:"Sábio de Atenas", desc:"Complete 15 lições.", cond:e=>totalLicoesConcluidas()>=15 },
+  { id:"rato_de_biblioteca", icone:"📚", nome:"Rato de Biblioteca", desc:"Termine seu primeiro livro.", cond:e=>e.livrosLidos.length>=1 },
+  { id:"colecionador", icone:"📖", nome:"Colecionador", desc:"Termine 4 livros da Biblioteca.", cond:e=>e.livrosLidos.length>=4 },
+  { id:"explorador", icone:"🗝️", nome:"Explorador de Segredos", desc:"Complete um caminho oculto.", cond:e=>concluiuAlgumaOculta() },
+  { id:"em_chamas", icone:"🔥", nome:"Em Chamas", desc:"Alcance 3 dias de ofensiva.", cond:e=>e.streak.dias>=3 },
+  { id:"semideus", icone:"⚡", nome:"Semideus do Saber", desc:"Acumule 500 XP.", cond:e=>e.xp>=500 },
+  { id:"cidadao_honorario", icone:"🎓", nome:"Cidadão Honorário", desc:"Conquiste seu primeiro certificado.", cond:e=>e.certificados.length>=1 }
+];
+
+/* ---------- Estado + persistência (localStorage) ---------- */
+function estadoNovo(){
+  return { perfil:null, xp:0, dracmas:50, coracoes:5, ultimoCoracaoTs:Date.now(),
+    streak:{ dias:0, ultimaData:null, congelamentos:0 }, dicas:1,
+    progresso:{}, testesPassados:[], livrosLidos:[], ocultasDesbloqueadas:[],
+    conquistas:[], certificados:[], trajes:[],
+    regioesDesbloqueadas:[...REGIOES_INICIAIS],
+    metaDiaria:{ data:null, xp:0, meta:META_DIARIA_XP } };
+}
+
+/* ---------- Áudio leve (Web Audio) ---------- */
+let audioCtx = null;
+function tocarSom(tipo){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    const agora = audioCtx.currentTime;
+    if(tipo==="certo"){ o.frequency.value=660; o.type="sine"; g.gain.setValueAtTime(.08,agora); g.gain.exponentialRampToValueAtTime(.001,agora+.18); o.start(agora); o.stop(agora+.2); }
+    else if(tipo==="errado"){ o.frequency.value=180; o.type="triangle"; g.gain.setValueAtTime(.07,agora); g.gain.exponentialRampToValueAtTime(.001,agora+.28); o.start(agora); o.stop(agora+.3); }
+    else if(tipo==="vitoria"){ [523,659,784].forEach((f,i)=>{ const o2=audioCtx.createOscillator(), g2=audioCtx.createGain(); o2.connect(g2); g2.connect(audioCtx.destination); o2.frequency.value=f; o2.type="sine"; const t=agora+i*.12; g2.gain.setValueAtTime(.06,t); g2.gain.exponentialRampToValueAtTime(.001,t+.25); o2.start(t); o2.stop(t+.28); }); }
+  }catch(e){ /* silencioso se o browser bloquear áudio */ }
+}
+let ESTADO = estadoNovo();
+
+function salvarProgresso(){
+  try{ localStorage.setItem(CHAVE_SAVE, JSON.stringify(ESTADO)); }
+  catch(e){ console.warn("Não foi possível salvar o progresso.", e); }
+}
+function carregarProgresso(){
+  try{
+    const bruto = localStorage.getItem(CHAVE_SAVE) || localStorage.getItem("platonia_save_v1");
+    if(bruto){
+      ESTADO = Object.assign(estadoNovo(), JSON.parse(bruto));
+      if(!ESTADO.regioesDesbloqueadas || !ESTADO.regioesDesbloqueadas.length){
+        ESTADO.regioesDesbloqueadas = [...REGIOES_INICIAIS];
+      }
+      if(!ESTADO.metaDiaria) ESTADO.metaDiaria = { data:hojeStr(), xp:0, meta:META_DIARIA_XP };
+    }
+  }catch(e){ console.warn("Save corrompido — começando um novo.", e); ESTADO = estadoNovo(); }
+}
+
+function garantirMetaDiaria(){
+  const hoje = hojeStr();
+  if(!ESTADO.metaDiaria || ESTADO.metaDiaria.data !== hoje){
+    ESTADO.metaDiaria = { data:hoje, xp:0, meta:META_DIARIA_XP };
+  }
+}
+function registrarXpDiario(qtd){
+  if(qtd<=0) return;
+  garantirMetaDiaria();
+  const antes = ESTADO.metaDiaria.xp;
+  ESTADO.metaDiaria.xp += qtd;
+  if(antes < ESTADO.metaDiaria.meta && ESTADO.metaDiaria.xp >= ESTADO.metaDiaria.meta){
+    ESTADO.dracmas += 15;
+    toast("🎯 Meta diária concluída! +15 🪙");
+  }
+}
+function regiaoDesbloqueada(id){
+  return (ESTADO.regioesDesbloqueadas || []).includes(id);
+}
+function tentarDesbloquearRegioes(){
+  const liberadas = ESTADO.regioesDesbloqueadas || (ESTADO.regioesDesbloqueadas = [...REGIOES_INICIAIS]);
+  const ordem = CONTEUDO_PLATONIA.regioes.map(r=>r.id);
+  for(const r of CONTEUDO_PLATONIA.regioes){
+    if(liberadas.includes(r.id)) continue;
+    const livroRel = CONTEUDO_PLATONIA.biblioteca.find(l=>l.regiaoRelacionada===r.id && ESTADO.livrosLidos.includes(l.id));
+    const concluidasCount = liberadas.filter(id=>{
+      const reg = obterRegiao(id);
+      return reg && regiaoConcluida(reg);
+    }).length;
+    const alvoPorProgresso = Math.min(ordem.length, REGIOES_INICIAIS.length + concluidasCount);
+    const deveLiberarPorProgresso = liberadas.length < alvoPorProgresso && ordem.find(id=>!liberadas.includes(id)) === r.id;
+    if(livroRel || deveLiberarPorProgresso){
+      liberadas.push(r.id);
+      toast("🗺️ Nova região desbloqueada: <b>" + esc(r.nome) + "</b>!");
+    }
+  }
+}
+function tempoProximoCoracao(){
+  if(ESTADO.coracoes >= 5) return "";
+  const restante = Math.max(0, MEIA_HORA - (Date.now() - ESTADO.ultimoCoracaoTs));
+  const m = Math.floor(restante / 60000), s = Math.floor((restante % 60000) / 1000);
+  return m + ":" + String(s).padStart(2,"0");
+}
+
+/* ---------- Utilidades ---------- */
+const $ = s => document.querySelector(s);
+function esc(t){ const d=document.createElement("div"); d.textContent=t; return d.innerHTML; }
+function normalizar(t){ return String(t).toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
+function hojeStr(d){ return (d||new Date()).toLocaleDateString("sv"); }
+function ontemStr(){ const d=new Date(); d.setDate(d.getDate()-1); return hojeStr(d); }
+function embaralhar(a){ const c=[...a]; for(let i=c.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [c[i],c[j]]=[c[j],c[i]]; } return c; }
+function obterRegiao(id){ return CONTEUDO_PLATONIA.regioes.find(r=>r.id===id); }
+function obterLicao(regiao, id){
+  for(const s of regiao.secoes){ const l=s.licoes.find(x=>x.id===id); if(l) return l; }
+  return null;
+}
+function licoesDaRegiao(regiao){ return regiao.secoes.flatMap(s=>s.licoes); }
+function concluidas(regiaoId){ return ESTADO.progresso[regiaoId] || []; }
+function totalLicoesConcluidas(){ return Object.values(ESTADO.progresso).reduce((s,a)=>s+a.length,0); }
+function concluiuAlgumaOculta(){
+  return CONTEUDO_PLATONIA.regioes.some(r => licoesDaRegiao(r).some(l => l.oculta && concluidas(r.id).includes(l.id)));
+}
+function regiaoConcluida(regiao){
+  const visiveis = licoesDaRegiao(regiao).filter(l=>!l.oculta);
+  return visiveis.every(l=>concluidas(regiao.id).includes(l.id)) && ESTADO.testesPassados.includes(regiao.id);
+}
+function progressoRegiao(regiao){
+  const visiveis = licoesDaRegiao(regiao).filter(l=>!l.oculta);
+  const feitas = visiveis.filter(l=>concluidas(regiao.id).includes(l.id)).length
+               + (ESTADO.testesPassados.includes(regiao.id)?1:0);
+  return Math.round(100 * feitas / (visiveis.length + 1));
+}
+
+let filaToast = [];
+function toast(msg){
+  filaToast.push(msg);
+  if(filaToast.length===1) proximoToast();
+}
+function proximoToast(){
+  if(!filaToast.length) return;
+  const el=$("#toast"); el.innerHTML=filaToast[0]; el.classList.add("visivel");
+  setTimeout(()=>{ el.classList.remove("visivel");
+    setTimeout(()=>{ filaToast.shift(); proximoToast(); }, 400); }, 2400);
+}
+
+/* ---------- Corações: regeneração por tempo ---------- */
+function regenerarCoracoes(){
+  const agora = Date.now();
+  while(ESTADO.coracoes < 5 && agora - ESTADO.ultimoCoracaoTs >= MEIA_HORA){
+    ESTADO.coracoes++; ESTADO.ultimoCoracaoTs += MEIA_HORA;
+  }
+  if(ESTADO.coracoes >= 5) ESTADO.ultimoCoracaoTs = agora;
+  atualizarTopbar(); salvarProgresso();
+}
+setInterval(regenerarCoracoes, 30000);
+
+/* ---------- Ofensiva (streak) ---------- */
+function verificarStreakAoAbrir(){
+  const s = ESTADO.streak;
+  if(!s.ultimaData || s.dias===0) return;
+  if(s.ultimaData === hojeStr() || s.ultimaData === ontemStr()) return;
+  if(s.congelamentos > 0){
+    s.congelamentos--; s.ultimaData = ontemStr();
+    toast("🧊 Um congelamento salvou sua ofensiva de " + s.dias + " dias!");
+  }else{
+    s.dias = 0;
+    toast("🔥 Sua ofensiva recomeçou. Complete uma lição hoje!");
+  }
+  salvarProgresso();
+}
+function registrarAtividadeStreak(){
+  const s = ESTADO.streak, hoje = hojeStr();
+  if(s.ultimaData === hoje) return;
+  s.dias = (s.ultimaData === ontemStr()) ? s.dias + 1 : 1;
+  s.ultimaData = hoje;
+  if(s.dias > 1) toast("🔥 Ofensiva de " + s.dias + " dias!");
+}
+
+/* ---------- Conquistas ---------- */
+function verificarConquistas(){
+  for(const c of CONQUISTAS){
+    if(!ESTADO.conquistas.includes(c.id) && c.cond(ESTADO)){
+      ESTADO.conquistas.push(c.id);
+      ESTADO.dracmas += 10;
+      toast(c.icone + " Conquista desbloqueada: <b>" + c.nome + "</b> (+10 🪙)");
+    }
+  }
+  salvarProgresso(); atualizarTopbar();
+}
+
+/* ---------- Topbar ---------- */
+function atualizarTopbar(){
+  $("#stat-streak").textContent = ESTADO.streak.dias;
+  $("#stat-dracmas").textContent = ESTADO.dracmas;
+  $("#stat-coracoes").textContent = ESTADO.coracoes;
+  $("#stat-xp").textContent = ESTADO.xp;
+  const timer = $("#stat-coracao-timer");
+  if(timer) timer.textContent = ESTADO.coracoes < 5 ? ("· " + tempoProximoCoracao()) : "";
+}
+
+/* ---------- Navegação entre telas ---------- */
+function mostrarTela(id){
+  document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
+  $("#shell").classList.remove("ativa");
+  if(id==="shell"){ $("#shell").classList.add("ativa"); }
+  else{ $("#"+id).classList.add("ativa"); }
+  window.scrollTo(0,0);
+}
+function irPara(dest, extra){
+  mostrarTela("shell");
+  document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("ativo", b.dataset.dest===dest));
+  if(dest==="mapa") renderMapa();
+  else if(dest==="trilha") renderTrilha(extra);
+  else if(dest==="biblioteca") renderBiblioteca();
+  else if(dest==="leitor") renderLeitor(extra);
+  else if(dest==="ligas") renderLigas();
+  else if(dest==="loja") renderLoja();
+  else if(dest==="perfil") renderPerfil();
+  else if(dest==="certificado") renderCertificado(extra);
+  window.scrollTo(0,0);
+}
+
+/* ---------- TELA: Mapa de Platonia ---------- */
+function renderMapa(){
+  garantirMetaDiaria();
+  tentarDesbloquearRegioes();
+  const nome = ESTADO.perfil ? esc(ESTADO.perfil.nome.split(" ")[0]) : "cidadão";
+  const metaPct = Math.min(100, Math.round(100 * ESTADO.metaDiaria.xp / ESTADO.metaDiaria.meta));
+  let html = `
+    <div class="faixa-mapa">
+      <h2>Mapa de Platonia 🗺️</h2>
+      <p>Olá, ${nome}! Escolha uma região e siga sua trilha do saber.</p>
+    </div>
+    <div class="meta-diaria">
+      <div class="topo"><b>🎯 Meta diária</b><span>${ESTADO.metaDiaria.xp}/${ESTADO.metaDiaria.meta} XP</span></div>
+      <div class="barra-prog"><div style="width:${metaPct}%;"></div></div>
+    </div>
+    <div class="mapa-grade">`;
+  for(const r of CONTEUDO_PLATONIA.regioes){
+    const pct = progressoRegiao(r);
+    const completa = regiaoConcluida(r);
+    const liberada = regiaoDesbloqueada(r.id);
+    html += `
+      <button class="regiao-cartao ${liberada?"":"bloqueada"}" data-regiao="${r.id}" ${liberada?"":"data-bloq=\"1\""}>
+        ${completa ? '<span class="completa-selo">🏆</span>' : (!liberada ? '<span class="selo-cadeado">🔒</span>' : '')}
+        <span class="icone">${r.icone}</span>
+        <h3>${esc(r.nome)}</h3>
+        <div class="barra-prog"><div style="width:${liberada?pct:0}%; background:linear-gradient(90deg,${r.cor},${r.cor}CC);"></div></div>
+        <span class="pct">${liberada ? (pct + "% concluído") : "Leia na Biblioteca ou avance 50% em outra região"}</span>
+      </button>`;
+  }
+  html += `</div>
+    <div class="cartao" style="margin-top:18px; border-color:var(--ouro); box-shadow:0 4px 0 var(--ouro-esc);">
+      <b>📚 Dica de Platonia:</b> <span style="color:var(--texto2); font-weight:700;">livros da Biblioteca revelam <b>caminhos ocultos</b> e ajudam a liberar novas regiões!</span>
+    </div>`;
+  $("#conteudo").innerHTML = html;
+  document.querySelectorAll(".regiao-cartao").forEach(b=>b.addEventListener("click",()=>{
+    if(b.dataset.bloq){ toast("🔒 Explore mais a Biblioteca ou avance nas regiões iniciais para liberar esta!"); return; }
+    irPara("trilha", b.dataset.regiao);
+  }));
+}
+
+/* ---------- TELA: Trilha da região ---------- */
+function renderTrilha(regiaoId){
+  const r = obterRegiao(regiaoId);
+  if(!r){ irPara("mapa"); return; }
+  const feitas = concluidas(regiaoId);
+  const offsets = [0, 46, 68, 46, 0, -46, -68, -46];
+  let html = `
+    <div class="trilha-cabecalho">
+      <button class="btn-voltar" id="voltar-mapa" aria-label="Voltar ao mapa">←</button>
+      <div>
+        <h2 class="titulo-secao" style="margin:0;">${r.icone} ${esc(r.nome)}</h2>
+        <p class="subtitulo-secao" style="margin:0;">Seção: ${esc(r.secoes[0].titulo)} · ${progressoRegiao(r)}%</p>
+      </div>
+    </div>
+    <div class="trilha">`;
+  let pos = 0, atualDefinida = false;
+  for(const sec of r.secoes){
+    for(const l of sec.licoes){
+      const revelada = !l.oculta || ESTADO.ocultasDesbloqueadas.includes(l.id);
+      if(!revelada) continue;
+      const feita = feitas.includes(l.id);
+      let classes = "no", icone = l.oculta ? "🗝️" : "⭐";
+      if(l.oculta) classes += " oculta-rev";
+      if(feita){ classes += " concluido"; icone = "👑"; }
+      else if(!l.oculta && !atualDefinida){ classes += " atual"; atualDefinida = true; }
+      else if(!l.oculta){ classes += " bloqueado"; icone = "🔒"; }
+      html += `
+        <div style="transform:translateX(${offsets[pos % offsets.length]}px); position:relative;">
+          <button class="${classes}" data-licao="${l.id}" ${(!l.oculta && !feita && !classes.includes("atual")) ? 'data-bloq="1"' : ''} aria-label="${esc(l.titulo)}">${icone}
+            <span class="rotulo">${esc(l.titulo)}</span>
+          </button>
+        </div>
+        <div class="no-espaco"></div>`;
+      pos++;
+    }
+    const testeFeito = ESTADO.testesPassados.includes(regiaoId);
+    html += `
+      <div style="transform:translateX(${offsets[pos % offsets.length]}px); position:relative;">
+        <button class="no teste ${testeFeito ? "concluido" : ""}" data-teste="1" aria-label="Teste da Seção">${testeFeito ? "🏆" : "🏛️"}
+          <span class="rotulo">Teste da Seção${testeFeito ? " ✓" : ""}</span>
+        </button>
+      </div>`;
+    pos++;
+  }
+  html += `</div>
+    <p style="text-align:center; color:var(--texto2); font-weight:700; font-size:.85rem;">
+      💡 O <b>Teste da Seção</b> está sempre aberto: acerte 80% e pule níveis!
+    </p>`;
+  $("#conteudo").innerHTML = html;
+  $("#voltar-mapa").addEventListener("click",()=>irPara("mapa"));
+  document.querySelectorAll(".no[data-licao]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      if(b.dataset.bloq){ toast("🔒 Complete a lição anterior para desbloquear esta!"); return; }
+      iniciarLicao(regiaoId, b.dataset.licao, false);
+    });
+  });
+  document.querySelector(".no[data-teste]").addEventListener("click",()=>iniciarLicao(regiaoId, null, true));
+}
+
+/* ---------- MOTOR DE LIÇÕES ---------- */
+let LICAO = null; // estado da lição em andamento
+
+function iniciarLicao(regiaoId, licaoId, modoTeste){
+  regenerarCoracoes();
+  if(ESTADO.coracoes <= 0){ mostrarTela("tela-semcoracoes"); return; }
+  const regiao = obterRegiao(regiaoId);
+  const fonte = modoTeste ? regiao.secoes[0].testeDaSecao.exercicios
+                          : obterLicao(regiao, licaoId).exercicios;
+  LICAO = {
+    regiaoId, licaoId, modoTeste,
+    fila: fonte.map(e=>({ ...e })),   // cópia da fila de exercícios
+    idx: 0, total: fonte.length,
+    corretos: 0, erros: 0, acertosTeste: 0,
+    combo: 0, melhorCombo: 0,
+    resposta: null, dicaUsada: false, travado: false,
+    ordemUsuario: [], paresFeitos: 0, escolhaEsq: null
+  };
+  mostrarTela("tela-licao");
+  renderExercicio();
+}
+
+function atualizarBarraLicao(){
+  const pct = Math.min(100, Math.round(100 * LICAO.corretos / LICAO.total));
+  $("#licao-progresso").style.width = pct + "%";
+  $("#licao-coracoes").textContent = "❤️ " + ESTADO.coracoes;
+}
+
+function renderExercicio(){
+  const ex = LICAO.fila[LICAO.idx];
+  LICAO.resposta = null; LICAO.dicaUsada = false; LICAO.travado = false;
+  LICAO.ordemUsuario = []; LICAO.paresFeitos = 0; LICAO.escolhaEsq = null;
+  atualizarBarraLicao();
+  const rodape = $("#rodape-licao");
+  rodape.className = "rodape-licao";
+  const corpo = $("#licao-corpo");
+  let html = "";
+  const tituloTipo = {
+    multipla_escolha:"Escolha a resposta correta", verdadeiro_falso:"Verdadeiro ou falso?",
+    completar:"Complete a frase", ordenar:"Toque para ordenar", associar:"Encontre os pares"
+  }[ex.tipo];
+  html += `<p style="color:var(--texto2); font-weight:900; text-transform:uppercase; font-size:.75rem; letter-spacing:1px; margin-bottom:0;">${tituloTipo}</p>`;
+  if(LICAO.combo >= 2){
+    html += `<div style="margin:8px 0 0;"><span class="combo-badge">🔥 Combo ×${LICAO.combo}</span></div>`;
+  }
+
+  if(ex.tipo === "multipla_escolha"){
+    html += `<div class="pergunta">${esc(ex.pergunta)}</div><div class="opcoes">`;
+    ex.opcoes.forEach((o,i)=>{ html += `<button class="opcao" data-i="${i}">${esc(o)}</button>`; });
+    html += `</div>`;
+  }
+  else if(ex.tipo === "verdadeiro_falso"){
+    html += `<div class="pergunta">${esc(ex.pergunta)}</div><div class="opcoes">
+      <button class="opcao" data-vf="true">✅ Verdadeiro</button>
+      <button class="opcao" data-vf="false">❌ Falso</button></div>`;
+  }
+  else if(ex.tipo === "completar"){
+    html += `<div class="pergunta">${esc(ex.frase)}</div>
+      <input class="input-completar" id="entrada-completar" type="text" autocomplete="off" placeholder="Digite sua resposta...">`;
+  }
+  else if(ex.tipo === "ordenar"){
+    html += `<div class="pergunta">${esc(ex.pergunta)}</div>
+      <p style="font-size:.8rem; color:var(--texto2); font-weight:800;">SUA RESPOSTA (toque para remover):</p>
+      <div class="fichas" id="area-resposta"></div>
+      <p style="font-size:.8rem; color:var(--texto2); font-weight:800;">OPÇÕES (toque para adicionar):</p>
+      <div class="fichas" id="area-banco" style="border-style:solid;">`;
+    ex.itens.forEach((it,i)=>{ html += `<button class="ficha" data-i="${i}">${esc(it)}</button>`; });
+    html += `</div>`;
+  }
+  else if(ex.tipo === "associar"){
+    const esq = embaralhar(ex.pares.map((p,i)=>({txt:p[0], i})));
+    const dir = embaralhar(ex.pares.map((p,i)=>({txt:p[1], i})));
+    html += `<div class="pergunta">${esc(ex.pergunta)}</div><div class="assoc-colunas"><div style="display:flex;flex-direction:column;gap:10px;">`;
+    esq.forEach(o=>{ html += `<button class="opcao assoc-item" data-lado="esq" data-par="${o.i}">${esc(o.txt)}</button>`; });
+    html += `</div><div style="display:flex;flex-direction:column;gap:10px;">`;
+    dir.forEach(o=>{ html += `<button class="opcao assoc-item" data-lado="dir" data-par="${o.i}">${esc(o.txt)}</button>`; });
+    html += `</div></div>
+      <p style="font-size:.8rem; color:var(--texto2); font-weight:800; text-align:center;">Neste desafio, errar o par não custa corações — tente à vontade!</p>`;
+  }
+  corpo.innerHTML = html;
+
+  // Rodapé padrão
+  $("#rodape-interno").innerHTML = `
+    <button class="btn-dica" id="botao-dica" style="display:${ex.tipo==="multipla_escolha" && ESTADO.dicas>0 ? "inline-block":"none"};">💡 Usar dica (${ESTADO.dicas})</button>
+    <div style="flex:1"></div>
+    <button class="btn btn-verde" id="botao-verificar" ${ex.tipo==="associar" ? 'style="display:none;"' : "disabled"}>Verificar</button>`;
+  ligarEventosExercicio(ex);
+}
+
+function ligarEventosExercicio(ex){
+  const btnV = $("#botao-verificar");
+  if(ex.tipo === "multipla_escolha" || ex.tipo === "verdadeiro_falso"){
+    document.querySelectorAll(".opcao").forEach(b=>b.addEventListener("click",()=>{
+      if(LICAO.travado) return;
+      document.querySelectorAll(".opcao").forEach(x=>x.classList.remove("selecionada"));
+      b.classList.add("selecionada");
+      LICAO.resposta = ex.tipo==="multipla_escolha" ? Number(b.dataset.i) : (b.dataset.vf==="true");
+      btnV.disabled = false;
+    }));
+  }
+  else if(ex.tipo === "completar"){
+    const inp = $("#entrada-completar");
+    inp.focus();
+    inp.addEventListener("input",()=>{ LICAO.resposta = inp.value; btnV.disabled = inp.value.trim()===""; });
+    inp.addEventListener("keydown",e=>{ if(e.key==="Enter" && !btnV.disabled && !LICAO.travado) verificarResposta(ex); });
+  }
+  else if(ex.tipo === "ordenar"){
+    const banco = $("#area-banco"), resp = $("#area-resposta");
+    banco.addEventListener("click",e=>{
+      const f = e.target.closest(".ficha"); if(!f || LICAO.travado) return;
+      resp.appendChild(f); LICAO.ordemUsuario.push(Number(f.dataset.i));
+      btnV.disabled = LICAO.ordemUsuario.length !== ex.itens.length;
+    });
+    resp.addEventListener("click",e=>{
+      const f = e.target.closest(".ficha"); if(!f || LICAO.travado) return;
+      banco.appendChild(f);
+      LICAO.ordemUsuario = LICAO.ordemUsuario.filter(i=>i!==Number(f.dataset.i));
+      btnV.disabled = true;
+    });
+  }
+  else if(ex.tipo === "associar"){
+    document.querySelectorAll(".assoc-item").forEach(b=>b.addEventListener("click",()=>{
+      if(LICAO.travado || b.classList.contains("par-feito")) return;
+      if(b.dataset.lado==="esq"){
+        document.querySelectorAll('[data-lado="esq"]').forEach(x=>x.classList.remove("escolhido"));
+        b.classList.add("escolhido"); LICAO.escolhaEsq = b;
+      }else{
+        if(!LICAO.escolhaEsq){ toast("Escolha primeiro um item da coluna esquerda!"); return; }
+        if(LICAO.escolhaEsq.dataset.par === b.dataset.par){
+          LICAO.escolhaEsq.classList.add("par-feito"); LICAO.escolhaEsq.classList.remove("escolhido");
+          b.classList.add("par-feito"); LICAO.escolhaEsq = null; LICAO.paresFeitos++;
+          if(LICAO.paresFeitos === ex.pares.length) mostrarFeedback(true, ex, "Todos os pares encontrados!");
+        }else{
+          b.classList.add("errada"); LICAO.escolhaEsq.classList.add("errada");
+          const a = b, c = LICAO.escolhaEsq;
+          setTimeout(()=>{ a.classList.remove("errada"); c.classList.remove("errada"); }, 400);
+        }
+      }
+    }));
+  }
+  const btnDica = $("#botao-dica");
+  if(btnDica) btnDica.addEventListener("click",()=>{
+    if(LICAO.dicaUsada || ESTADO.dicas<=0 || LICAO.travado) return;
+    ESTADO.dicas--; LICAO.dicaUsada = true; salvarProgresso();
+    const erradas = [...document.querySelectorAll(".opcao")].filter(b=>Number(b.dataset.i)!==ex.correta);
+    embaralhar(erradas).slice(0,2).forEach(b=>b.classList.add("desativada"));
+    btnDica.style.display = "none";
+    toast("💡 Atena eliminou duas opções erradas!");
+  });
+  if(btnV) btnV.addEventListener("click",()=>{ if(!LICAO.travado) verificarResposta(ex); });
+}
+
+function verificarResposta(ex){
+  let correto = false;
+  if(ex.tipo==="multipla_escolha") correto = LICAO.resposta === ex.correta;
+  else if(ex.tipo==="verdadeiro_falso") correto = LICAO.resposta === ex.correta;
+  else if(ex.tipo==="completar") correto = normalizar(LICAO.resposta) === normalizar(ex.resposta);
+  else if(ex.tipo==="ordenar") correto = JSON.stringify(LICAO.ordemUsuario) === JSON.stringify(ex.ordemCorreta);
+  // Pinta as opções de certo/errado
+  if(ex.tipo==="multipla_escolha"){
+    document.querySelectorAll(".opcao").forEach(b=>{
+      const i = Number(b.dataset.i);
+      if(i===ex.correta) b.classList.add("certa");
+      else if(i===LICAO.resposta) b.classList.add("errada");
+    });
+  }else if(ex.tipo==="verdadeiro_falso"){
+    document.querySelectorAll(".opcao").forEach(b=>{
+      const v = b.dataset.vf==="true";
+      if(v===ex.correta) b.classList.add("certa");
+      else if(v===LICAO.resposta) b.classList.add("errada");
+    });
+  }
+  mostrarFeedback(correto, ex);
+}
+
+function mostrarFeedback(correto, ex, msgExtra){
+  LICAO.travado = true;
+  const rodape = $("#rodape-licao");
+  rodape.classList.add(correto ? "certo" : "errado");
+  let detalhe = msgExtra || ex.explicacao || "";
+  if(!correto){
+    let certaTxt = "";
+    if(ex.tipo==="multipla_escolha") certaTxt = "Resposta: " + ex.opcoes[ex.correta] + ". ";
+    else if(ex.tipo==="verdadeiro_falso") certaTxt = "Resposta: " + (ex.correta?"Verdadeiro":"Falso") + ". ";
+    else if(ex.tipo==="completar") certaTxt = "Resposta: " + ex.resposta + ". ";
+    else if(ex.tipo==="ordenar") certaTxt = "Ordem certa: " + ex.ordemCorreta.map(i=>ex.itens[i]).join(" → ") + ". ";
+    detalhe = certaTxt + (ex.explicacao || "");
+  }
+  if(correto){
+    LICAO.corretos++; if(LICAO.modoTeste) LICAO.acertosTeste++;
+    LICAO.combo++; if(LICAO.combo > LICAO.melhorCombo) LICAO.melhorCombo = LICAO.combo;
+    tocarSom("certo");
+  }
+  else{
+    LICAO.erros++;
+    LICAO.combo = 0;
+    tocarSom("errado");
+    ESTADO.coracoes = Math.max(0, ESTADO.coracoes - 1);
+    if(ESTADO.coracoes === 4) ESTADO.ultimoCoracaoTs = Date.now(); // inicia contagem de recuperação
+    if(!LICAO.modoTeste) LICAO.fila.push({ ...ex }); // reforço: o exercício volta ao fim da fila
+    salvarProgresso();
+  }
+  atualizarBarraLicao(); atualizarTopbar();
+  $("#rodape-interno").innerHTML = `
+    <div class="feedback-texto ${correto?"ok":"nok"}">
+      <strong>${correto ? "Excelente! ✅" : "Não foi dessa vez... ❌"}</strong>
+      <p>${esc(detalhe)}</p>
+    </div>
+    <button class="btn ${correto?"btn-verde":"btn-verm"}" id="botao-continuar">Continuar</button>`;
+  $("#botao-continuar").addEventListener("click",()=>{
+    if(ESTADO.coracoes <= 0 && !LICAO.modoTeste){ mostrarTela("tela-semcoracoes"); return; }
+    LICAO.idx++;
+    if(LICAO.idx >= LICAO.fila.length) finalizarLicao();
+    else renderExercicio();
+  });
+}
+
+/* ---------- Fim de lição / teste ---------- */
+function finalizarLicao(){
+  const r = obterRegiao(LICAO.regiaoId);
+  if(LICAO.modoTeste){
+    const pct = LICAO.acertosTeste / LICAO.total;
+    if(pct >= 0.8){
+      const primeira = !ESTADO.testesPassados.includes(LICAO.regiaoId);
+      if(primeira) ESTADO.testesPassados.push(LICAO.regiaoId);
+      const xp = primeira ? 50 : 10, dr = primeira ? 20 : 4;
+      ESTADO.xp += xp; ESTADO.dracmas += dr;
+      registrarXpDiario(xp);
+      registrarAtividadeStreak();
+      let certNovo = false;
+      if(regiaoConcluida(r) && !ESTADO.certificados.some(c=>c.regiaoId===r.id)){
+        ESTADO.certificados.push({ regiaoId:r.id, data:hojeStr() }); certNovo = true;
+      }
+      tentarDesbloquearRegioes();
+      salvarProgresso(); verificarConquistas();
+      tocarSom("vitoria");
+      telaVitoria("🏆","Teste da Seção aprovado!",
+        `Você acertou ${LICAO.acertosTeste} de ${LICAO.total} (${Math.round(pct*100)}%).` +
+        (certNovo ? " 🎓 Você completou a região e ganhou um CERTIFICADO! Veja no seu Perfil." : ""),
+        xp, dr, true);
+    }else{
+      telaVitoria("😅","Quase lá!",
+        `Você acertou ${LICAO.acertosTeste} de ${LICAO.total}. É preciso acertar 80% para passar. Revise as lições e tente de novo!`,
+        0, 0, false);
+    }
+    return;
+  }
+  // Lição comum
+  const lic = obterLicao(r, LICAO.licaoId);
+  const lista = ESTADO.progresso[LICAO.regiaoId] || (ESTADO.progresso[LICAO.regiaoId] = []);
+  const primeira = !lista.includes(LICAO.licaoId);
+  if(primeira) lista.push(LICAO.licaoId);
+  const perfeita = LICAO.erros === 0;
+  let xp = primeira ? (lic.oculta ? 20 : 10) : 5;
+  if(perfeita) xp += 5;
+  if(LICAO.melhorCombo >= 3) xp += 3;
+  const dr = primeira ? 5 : 2;
+  ESTADO.xp += xp; ESTADO.dracmas += dr;
+  registrarXpDiario(xp);
+  registrarAtividadeStreak();
+  tentarDesbloquearRegioes();
+  salvarProgresso(); verificarConquistas();
+  tocarSom("vitoria");
+  telaVitoria(lic.oculta ? "🗝️" : "🎉",
+    perfeita ? "Lição perfeita!" : "Lição concluída!",
+    perfeita ? "Nenhum erro — os deuses do Olimpo aplaudem!" :
+               (primeira ? "Mais um passo para fora da caverna." : "Boa revisão! A prática leva à perfeição.") +
+               (LICAO.melhorCombo >= 3 ? ` Combo máximo: ×${LICAO.melhorCombo}!` : ""),
+    xp, dr, true);
+}
+
+function telaVitoria(emoji, titulo, msg, xp, dr, sucesso){
+  atualizarTopbar();
+  $("#vitoria-conteudo").innerHTML = `
+    <div class="emoji-grande">${emoji}</div>
+    <h2>${esc(titulo)}</h2>
+    <p style="color:var(--texto2); font-weight:700;">${msg}</p>
+    ${xp>0 ? `<div class="recompensas">
+      <div class="recompensa"><div class="valor" style="color:var(--ouro-esc);">+${xp}</div><div class="nome">XP ⭐</div></div>
+      <div class="recompensa"><div class="valor" style="color:var(--azul);">+${dr}</div><div class="nome">Dracmas 🪙</div></div>
+      <div class="recompensa"><div class="valor" style="color:var(--verde);">${LICAO.corretos}</div><div class="nome">Acertos ✅</div></div>
+    </div>` : ""}
+    <button class="btn ${sucesso?"btn-verde":"btn-azul"} btn-largo" id="botao-vitoria-continuar">${sucesso?"Continuar":"Voltar à trilha"}</button>`;
+  mostrarTela("tela-vitoria");
+  if(sucesso) confete();
+  $("#botao-vitoria-continuar").addEventListener("click",()=>irPara("trilha", LICAO.regiaoId));
+}
+
+function confete(){
+  const cores = ["#FFC800","#1C7AC4","#58CC02","#E85D9E","#7B5CD6","#FF4B4B"];
+  for(let i=0;i<70;i++){
+    const c = document.createElement("div");
+    c.className = "confete";
+    c.style.left = Math.random()*100 + "vw";
+    c.style.background = cores[Math.floor(Math.random()*cores.length)];
+    c.style.animationDuration = (1.6 + Math.random()*1.8) + "s";
+    c.style.animationDelay = Math.random()*0.6 + "s";
+    c.style.borderRadius = Math.random()>0.5 ? "50%" : "2px";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4200);
+  }
+}
+
+/* ---------- TELA: Biblioteca ---------- */
+function renderBiblioteca(){
+  let html = `
+    <h2 class="titulo-secao">📚 Biblioteca de Platonia</h2>
+    <p class="subtitulo-secao">Resumos de grandes obras e livros-jogo. Terminar um livro revela caminhos ocultos no mapa!</p>
+    <div class="estante">`;
+  for(const livro of CONTEUDO_PLATONIA.biblioteca){
+    const lido = ESTADO.livrosLidos.includes(livro.id);
+    const regiao = livro.regiaoRelacionada ? obterRegiao(livro.regiaoRelacionada) : null;
+    html += `
+      <button class="livro-cartao" data-livro="${livro.id}">
+        <div class="livro-capa" style="background:${livro.cor};">${livro.icone}</div>
+        <div class="livro-info">
+          <h3>${esc(livro.titulo)}</h3>
+          <p>${regiao ? regiao.icone + " " + esc(regiao.nome) : "Aventura interativa"}</p>
+          ${livro.tipo==="livro_jogo" ? '<span class="etiqueta jogo">🎲 Livro-jogo</span> ' : ''}
+          ${lido ? '<span class="etiqueta lido">✓ Lido</span>' :
+            (livro.desbloqueiaLicao ? '<span class="etiqueta novo">🗝️ Revela caminho oculto</span>' : '')}
+        </div>
+      </button>`;
+  }
+  html += `</div>`;
+  $("#conteudo").innerHTML = html;
+  document.querySelectorAll(".livro-cartao").forEach(b=>b.addEventListener("click",()=>irPara("leitor", b.dataset.livro)));
+}
+
+/* ---------- TELA: Leitor (resumo ou livro-jogo) ---------- */
+function renderLeitor(livroId){
+  const livro = CONTEUDO_PLATONIA.biblioteca.find(l=>l.id===livroId);
+  if(!livro){ irPara("biblioteca"); return; }
+  if(livro.tipo === "livro_jogo"){ renderLivroJogo(livro, 0); return; }
+  const lido = ESTADO.livrosLidos.includes(livro.id);
+  const paragrafos = livro.conteudo.split("\n\n").map(p=>`<p>${esc(p)}</p>`).join("");
+  $("#conteudo").innerHTML = `
+    <div class="trilha-cabecalho">
+      <button class="btn-voltar" id="voltar-bib" aria-label="Voltar à biblioteca">←</button>
+      <h2 class="titulo-secao" style="margin:0;">${livro.icone} Leitura</h2>
+    </div>
+    <div class="leitor">
+      <h2>${esc(livro.titulo)}</h2>
+      ${paragrafos}
+      ${lido
+        ? '<span class="etiqueta lido">✓ Você já leu este livro</span>'
+        : '<button class="btn btn-verde btn-largo" id="botao-lido" style="margin-top:14px;">Marcar como lido ✓</button>'}
+    </div>`;
+  $("#voltar-bib").addEventListener("click",()=>irPara("biblioteca"));
+  const btn = $("#botao-lido");
+  if(btn) btn.addEventListener("click",()=>concluirLivro(livro));
+}
+
+function concluirLivro(livro){
+  if(ESTADO.livrosLidos.includes(livro.id)) return;
+  ESTADO.livrosLidos.push(livro.id);
+  ESTADO.xp += 15; ESTADO.dracmas += 5;
+  registrarXpDiario(15);
+  registrarAtividadeStreak();
+  toast("📖 Livro concluído! +15 ⭐ e +5 🪙");
+  if(livro.desbloqueiaLicao && !ESTADO.ocultasDesbloqueadas.includes(livro.desbloqueiaLicao)){
+    ESTADO.ocultasDesbloqueadas.push(livro.desbloqueiaLicao);
+    const regiao = obterRegiao(livro.regiaoRelacionada);
+    setTimeout(()=>toast("🗝️ Um caminho oculto se revelou em <b>" + esc(regiao.nome) + "</b>!"), 800);
+  }
+  tentarDesbloquearRegioes();
+  salvarProgresso(); verificarConquistas(); atualizarTopbar();
+  irPara("leitor", livro.id);
+}
+
+function renderLivroJogo(livro, pag){
+  const p = livro.paginas[pag];
+  const ehFim = p.texto.includes("FIM");
+  if(ehFim && !ESTADO.livrosLidos.includes(livro.id)) concluirLivro(livro);
+  let html = `
+    <div class="trilha-cabecalho">
+      <button class="btn-voltar" id="voltar-bib" aria-label="Voltar à biblioteca">←</button>
+      <h2 class="titulo-secao" style="margin:0;">${livro.icone} ${esc(livro.titulo)}</h2>
+    </div>
+    <div class="leitor">
+      <p style="font-size:1.05rem;">${esc(p.texto)}</p>
+      <div style="margin-top:16px;">O que você faz?</div>`;
+  p.escolhas.forEach((e2,i)=>{
+    html += `<button class="btn btn-azul escolha-jogo" data-vai="${e2.vaiPara}">→ ${esc(e2.texto)}</button>`;
+  });
+  html += `</div>`;
+  $("#conteudo").innerHTML = html;
+  $("#voltar-bib").addEventListener("click",()=>irPara("biblioteca"));
+  document.querySelectorAll(".escolha-jogo").forEach(b=>b.addEventListener("click",()=>renderLivroJogo(livro, Number(b.dataset.vai))));
+}
+
+/* ---------- TELA: Ágora (loja) ---------- */
+function renderLoja(){
+  let html = `
+    <h2 class="titulo-secao">🏺 Ágora de Platonia</h2>
+    <p class="subtitulo-secao">Você tem <b>🪙 ${ESTADO.dracmas} dracmas</b>. Ganhe mais completando lições, testes e conquistas!</p>`;
+  for(const item of ITENS_LOJA){
+    const comprado = item.traje && ESTADO.trajes.includes(item.id);
+    let extra = "";
+    if(item.id==="gelo") extra = ` (você tem ${ESTADO.streak.congelamentos})`;
+    if(item.id==="dica") extra = ` (você tem ${ESTADO.dicas})`;
+    html += `
+      <div class="item-loja">
+        <div class="icone">${item.icone}</div>
+        <div class="info"><h3>${esc(item.nome)}${extra}</h3><p>${esc(item.desc)}</p></div>
+        <button class="btn ${comprado?"btn-branco":"btn-ouro"}" data-item="${item.id}" ${comprado?"disabled":""}>
+          ${comprado ? "Adquirido ✓" : "🪙 " + item.preco}
+        </button>
+      </div>`;
+  }
+  $("#conteudo").innerHTML = html;
+  document.querySelectorAll("[data-item]").forEach(b=>b.addEventListener("click",()=>comprar(b.dataset.item)));
+}
+
+function comprar(id){
+  const item = ITENS_LOJA.find(i=>i.id===id);
+  if(ESTADO.dracmas < item.preco){ toast("🪙 Dracmas insuficientes! Complete lições para ganhar mais."); return; }
+  if(id==="refil"){
+    if(ESTADO.coracoes>=5){ toast("❤️ Seus corações já estão cheios!"); return; }
+    ESTADO.coracoes = 5;
+  }
+  else if(id==="gelo"){
+    if(ESTADO.streak.congelamentos>=2){ toast("🧊 Você já tem o máximo de congelamentos (2)."); return; }
+    ESTADO.streak.congelamentos++;
+  }
+  else if(id==="dica"){ ESTADO.dicas++; }
+  else if(item.traje){
+    ESTADO.trajes.push(id);
+    ESTADO.perfil.avatar = item.icone;
+    toast(item.icone + " Novo retrato equipado! Troque quando quiser no Perfil.");
+  }
+  ESTADO.dracmas -= item.preco;
+  salvarProgresso(); atualizarTopbar();
+  if(!item.traje) toast(item.icone + " " + item.nome + " — compra realizada!");
+  renderLoja();
+}
+
+/* ---------- TELA: Ligas ---------- */
+function nomeLiga(xp){
+  if(xp < 300) return {nome:"Liga de Bronze", icone:"🥉"};
+  if(xp < 800) return {nome:"Liga de Prata", icone:"🥈"};
+  if(xp < 1500) return {nome:"Liga de Ouro", icone:"🥇"};
+  return {nome:"Liga do Olimpo", icone:"⚡"};
+}
+function renderLigas(){
+  const liga = nomeLiga(ESTADO.xp);
+  const eu = { nome: ESTADO.perfil.nome + " (você)", avatar: ESTADO.perfil.avatar, xp: ESTADO.xp, eu:true };
+  const todos = [...BOTS_LIGA, eu].sort((a,b)=>b.xp - a.xp);
+  let html = `
+    <h2 class="titulo-secao">${liga.icone} ${liga.nome}</h2>
+    <p class="subtitulo-secao">Acumule XP para subir de posição e alcançar a Liga do Olimpo!</p>
+    <ol class="ranking">`;
+  todos.forEach((p,i)=>{
+    const medalha = i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1)+"º";
+    html += `<li class="${p.eu?"eu":""}">
+      <span class="pos">${medalha}</span><span>${p.avatar}</span>
+      <span>${esc(p.nome)}</span><span class="xp-rank">${p.xp} XP</span></li>`;
+  });
+  html += `</ol>`;
+  $("#conteudo").innerHTML = html;
+}
+
+/* ---------- TELA: Perfil ---------- */
+function renderPerfil(){
+  const p = ESTADO.perfil;
+  const avataresDisponiveis = [...AVATARES_BASE, ...ESTADO.trajes.map(t=>ITENS_LOJA.find(i=>i.id===t).icone)];
+  let html = `
+    <div class="perfil-topo">
+      <div class="perfil-avatar">${p.avatar}</div>
+      <div>
+        <h2 style="margin:0;">${esc(p.nome)}</h2>
+        <p style="margin:2px 0 0; color:var(--texto2); font-weight:700; font-size:.85rem;">Cidadão de Platonia · ${esc(p.email)}</p>
+      </div>
+    </div>
+    <p style="font-weight:800; font-size:.8rem; color:var(--texto2); text-transform:uppercase; letter-spacing:1px;">Trocar retrato</p>
+    <div class="avatares" style="justify-content:flex-start;">`;
+  avataresDisponiveis.forEach(a=>{
+    html += `<button class="avatar-opcao ${a===p.avatar?"selecionado":""}" data-av="${a}">${a}</button>`;
+  });
+  html += `</div>
+    <div class="grade-stats">
+      <div class="stat-caixa"><div class="valor">⭐ ${ESTADO.xp}</div><div class="nome">XP total</div></div>
+      <div class="stat-caixa"><div class="valor">🔥 ${ESTADO.streak.dias}</div><div class="nome">Ofensiva</div></div>
+      <div class="stat-caixa"><div class="valor">📘 ${totalLicoesConcluidas()}</div><div class="nome">Lições</div></div>
+      <div class="stat-caixa"><div class="valor">📖 ${ESTADO.livrosLidos.length}</div><div class="nome">Livros lidos</div></div>
+    </div>
+    <h3 class="titulo-secao" style="font-size:1.2rem;">🎓 Certificados</h3>`;
+  if(ESTADO.certificados.length === 0){
+    html += `<p class="subtitulo-secao">Complete todas as lições e o Teste da Seção de uma região para conquistar um certificado.</p>`;
+  }else{
+    for(const c of ESTADO.certificados){
+      const r = obterRegiao(c.regiaoId);
+      html += `<button class="cert-cartao" data-cert="${c.regiaoId}">
+        <span style="font-size:1.8rem;">🎓</span>
+        <span><b>${esc(r.certificado.titulo)}</b><br>
+        <small style="color:var(--texto2); font-weight:700;">${r.icone} ${esc(r.nome)} · concluído em ${c.data.split("-").reverse().join("/")}</small></span>
+        <span style="margin-left:auto;">→</span>
+      </button>`;
+    }
+  }
+  html += `<h3 class="titulo-secao" style="font-size:1.2rem; margin-top:20px;">🏅 Conquistas</h3><div class="medalhas">`;
+  for(const c of CONQUISTAS){
+    const tem = ESTADO.conquistas.includes(c.id);
+    html += `<div class="medalha ${tem?"":"bloqueada"}">
+      <div class="icone">${c.icone}</div><h4>${esc(c.nome)}</h4><p>${esc(c.desc)}</p></div>`;
+  }
+  html += `</div>
+    <button class="btn btn-verm btn-largo" id="botao-reiniciar" style="margin-top:24px;">Recomeçar do zero (apaga o progresso)</button>`;
+  $("#conteudo").innerHTML = html;
+  document.querySelectorAll(".avatar-opcao").forEach(b=>b.addEventListener("click",()=>{
+    ESTADO.perfil.avatar = b.dataset.av; salvarProgresso(); renderPerfil();
+  }));
+  document.querySelectorAll("[data-cert]").forEach(b=>b.addEventListener("click",()=>irPara("certificado", b.dataset.cert)));
+  $("#botao-reiniciar").addEventListener("click",()=>{
+    if(confirm("Tem certeza? Todo o seu progresso em Platonia será apagado.")){
+      localStorage.removeItem(CHAVE_SAVE);
+      localStorage.removeItem("platonia_save_v1");
+      location.reload();
+    }
+  });
+}
+
+/* ---------- TELA: Certificado (canvas + download) ---------- */
+function renderCertificado(regiaoId){
+  const r = obterRegiao(regiaoId);
+  const cert = ESTADO.certificados.find(c=>c.regiaoId===regiaoId);
+  $("#conteudo").innerHTML = `
+    <div class="trilha-cabecalho">
+      <button class="btn-voltar" id="voltar-perfil" aria-label="Voltar ao perfil">←</button>
+      <h2 class="titulo-secao" style="margin:0;">🎓 Seu certificado</h2>
+    </div>
+    <canvas id="canvas-cert" width="1000" height="700"></canvas>
+    <button class="btn btn-verde btn-largo" id="botao-baixar" style="margin-top:14px;">⬇️ Baixar certificado (PNG)</button>`;
+  const cv = $("#canvas-cert"), ctx = cv.getContext("2d");
+  // Fundo e molduras
+  ctx.fillStyle = "#FDFBF3"; ctx.fillRect(0,0,1000,700);
+  ctx.strokeStyle = "#FFC800"; ctx.lineWidth = 14; ctx.strokeRect(24,24,952,652);
+  ctx.strokeStyle = "#1C7AC4"; ctx.lineWidth = 3; ctx.strokeRect(48,48,904,604);
+  // Cabeçalho
+  ctx.fillStyle = "#16324F"; ctx.textAlign = "center";
+  ctx.font = "42px Georgia"; ctx.fillText("🏛️", 500, 120);
+  ctx.font = "bold 30px Georgia"; ctx.letterSpacing = "6px";
+  ctx.fillText("P L A T O N I A", 500, 168);
+  ctx.letterSpacing = "0px";
+  ctx.font = "16px Georgia"; ctx.fillStyle = "#5B6B80";
+  ctx.fillText("A  T E R R A  D O  S A B E R", 500, 196);
+  ctx.font = "bold 44px Georgia"; ctx.fillStyle = "#B8860B";
+  ctx.fillText("CERTIFICADO", 500, 268);
+  ctx.font = "18px Georgia"; ctx.fillStyle = "#16324F";
+  ctx.fillText("Certificamos que o cidadão(ã) de Platonia", 500, 320);
+  ctx.font = "italic bold 40px Georgia"; ctx.fillStyle = "#1C7AC4";
+  ctx.fillText(ESTADO.perfil.nome, 500, 378);
+  ctx.font = "18px Georgia"; ctx.fillStyle = "#16324F";
+  ctx.fillText("concluiu com êxito a trilha de conhecimento", 500, 424);
+  ctx.font = "bold 28px Georgia";
+  ctx.fillText(r.certificado.titulo + "  " + r.icone, 500, 468);
+  ctx.font = "18px Georgia"; ctx.fillStyle = "#5B6B80";
+  ctx.fillText("na região " + r.nome + "  ·  Carga horária: " + r.certificado.cargaHoraria, 500, 504);
+  ctx.fillText("Emitido em " + cert.data.split("-").reverse().join("/"), 500, 534);
+  // Selo e assinatura
+  ctx.strokeStyle = "#B8860B"; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(210, 590, 46, 0, Math.PI*2); ctx.stroke();
+  ctx.font = "34px Georgia"; ctx.fillStyle = "#B8860B"; ctx.fillText("🦉", 210, 602);
+  ctx.strokeStyle = "#16324F"; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(640,596); ctx.lineTo(880,596); ctx.stroke();
+  ctx.font = "italic 20px Georgia"; ctx.fillStyle = "#16324F";
+  ctx.fillText("Academia de Platonia", 760, 586);
+  ctx.font = "13px Georgia"; ctx.fillStyle = "#5B6B80";
+  ctx.fillText("platonia.academy", 760, 618);
+  $("#voltar-perfil").addEventListener("click",()=>irPara("perfil"));
+  $("#botao-baixar").addEventListener("click",()=>{
+    const a = document.createElement("a");
+    a.download = "certificado-platonia-" + regiaoId + ".png";
+    a.href = cv.toDataURL("image/png");
+    a.click();
+  });
+}
+
+/* ---------- Fluxo inicial: splash → cadastro → visto → mapa ---------- */
+let avatarEscolhido = AVATARES_BASE[0];
+function montarAvataresCadastro(){
+  const alvo = $("#avatares-cadastro");
+  alvo.innerHTML = AVATARES_BASE.map(a=>
+    `<button class="avatar-opcao ${a===avatarEscolhido?"selecionado":""}" data-av="${a}" type="button">${a}</button>`).join("");
+  alvo.querySelectorAll(".avatar-opcao").forEach(b=>b.addEventListener("click",()=>{
+    avatarEscolhido = b.dataset.av; montarAvataresCadastro();
+  }));
+}
+
+function iniciarApp(){
+  carregarProgresso();
+  garantirMetaDiaria();
+  regenerarCoracoes();
+  verificarStreakAoAbrir();
+  atualizarTopbar();
+  montarAvataresCadastro();
+  setInterval(atualizarTopbar, 1000);
+
+  // Splash: tocar na luz
+  $("#botao-luz").addEventListener("click",()=>{
+    $("#tela-splash").classList.add("clareando");
+    setTimeout(()=>{
+      if(ESTADO.perfil){ irPara("mapa"); }
+      else{ mostrarTela("tela-cadastro"); }
+      $("#tela-splash").classList.remove("clareando");
+    }, 850);
+  });
+
+  // Cadastro: emitir passaporte
+  $("#botao-emitir").addEventListener("click",()=>{
+    const nome = $("#campo-nome").value.trim();
+    const email = $("#campo-email").value.trim();
+    const nomeOk = nome.length >= 2;
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    $("#erro-nome").style.display = nomeOk ? "none" : "block";
+    $("#erro-email").style.display = emailOk ? "none" : "block";
+    if(!nomeOk || !emailOk) return;
+    ESTADO.perfil = { nome, email, avatar: avatarEscolhido };
+    salvarProgresso();
+    mostrarTela("tela-visto");
+  });
+
+  // Visto → tutorial em 3 passos → mapa
+  $("#botao-tutorial").addEventListener("click",()=>{
+    $("#visto-carimbo").style.display = "none";
+    $("#visto-tutorial").style.display = "block";
+  });
+  let passo = 0;
+  $("#botao-passo").addEventListener("click",()=>{
+    passo++;
+    if(passo > 2){ irPara("mapa"); toast("🏛️ Bem-vindo a Platonia, " + esc(ESTADO.perfil.nome.split(" ")[0]) + "!"); return; }
+    document.querySelectorAll(".tutorial-passo").forEach(t=>t.classList.toggle("ativo", Number(t.dataset.passo)===passo));
+    document.querySelectorAll("#tutorial-pontinhos span").forEach((s,i)=>s.classList.toggle("ativo", i===passo));
+    if(passo===2) $("#botao-passo").textContent = "Entrar em Platonia!";
+  });
+
+  // Navegação principal
+  document.querySelectorAll(".nav-item").forEach(b=>b.addEventListener("click",()=>irPara(b.dataset.dest)));
+
+  // Sair da lição / sem corações
+  $("#botao-sair-licao").addEventListener("click",()=>{
+    if(confirm("Sair da lição? O progresso desta lição será perdido.")) irPara("trilha", LICAO.regiaoId);
+  });
+  $("#botao-ir-biblioteca").addEventListener("click",()=>irPara("biblioteca"));
+  $("#botao-ir-loja").addEventListener("click",()=>irPara("loja"));
+}
+
+document.addEventListener("DOMContentLoaded", iniciarApp);
+</script>
+</body>
+</html>
