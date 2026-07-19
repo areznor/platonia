@@ -16,6 +16,23 @@
 # production
 /build
 
+# Capacitor web bundle (gerado por npm run build:app)
+/www
+
+# Android local
+/android/.gradle/
+/android/app/build/
+/android/build/
+/android/captures/
+/android/local.properties
+*.keystore
+*.jks
+
+# iOS local
+/ios/App/Pods/
+/ios/DerivedData/
+/ios/App/App/public/
+
 # misc
 .DS_Store
 *.pem

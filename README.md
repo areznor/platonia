@@ -2,27 +2,10 @@
 
 App educacional gratuito estilo Duolingo, com trilhas de aprendizado, biblioteca, certificados e gamificação.
 
-**Domínio:** [platonia.academy](https://platonia.academy)
+**Domínio:** [platonia.academy](https://platonia.academy)  
+**Repo:** [github.com/areznor/platonia](https://github.com/areznor/platonia)
 
-## O que há de novo (v2)
-
-Esta versão parte do **protótipo HTML local** (motor completo de aprendizado) e substitui o site Next.js antigo do GitHub, que era sobretudo uma landing/marketing sem motor de lições.
-
-### Reaproveitado do repositório anterior
-- Identidade “Platonia Academy” e metáfora do passaporte / caverna de Platão
-- Assets de marca (`public/images`)
-- Intenção de landing + CTA “Criar passaporte”
-- Stack Next.js como casca do produto (pronto para auth/MongoDB/Stripe no futuro)
-
-### Vindo do novo protótipo (e melhorado)
-- Splash da caverna → passaporte → tutorial → mapa
-- 8 regiões com trilhas, Teste da Seção e certificados
-- 5 tipos de exercício + reforço ao errar
-- Biblioteca (resumos + livro-jogo) que revela caminhos ocultos
-- Ágora (loja), ligas, conquistas, ofensiva, corações
-- **Novidades v2:** meta diária de XP, desbloqueio progressivo de regiões, combo de acertos, contagem regressiva de corações, feedback sonoro e trilha visual com caminho
-
-## Como rodar
+## Como rodar (web)
 
 ```bash
 npm install
@@ -32,18 +15,69 @@ npm run dev
 - Landing: [http://localhost:3000](http://localhost:3000)
 - App: [http://localhost:3000/aprender/](http://localhost:3000/aprender/)
 
+## App nativo (Capacitor) — Fase 1
+
+O app das lojas embala o SPA de aprendizado (`public/aprender`), não a landing de marketing.
+
+| Script | O que faz |
+|--------|-----------|
+| `npm run build:app` | Copia `public/aprender` → `www/` |
+| `npm run cap:sync` | Gera `www/` e sincroniza com Android/iOS |
+| `npm run cap:android` | Sync + abre o projeto no Android Studio |
+| `npm run cap:ios` | Sync + abre no Xcode (**somente macOS**) |
+
+### Android (Windows / macOS / Linux)
+
+1. Instale o [Android Studio](https://developer.android.com/studio)
+2. No projeto:
+
+```bash
+npm install
+npm run cap:android
+```
+
+3. No Android Studio: rode em emulador ou dispositivo USB (Run ▶)
+
+- **appId:** `academy.platonia.app`
+- **Nome:** Platonia
+- Pasta nativa: `android/` (versionada no git)
+- Bundle web: `www/` (gerado; não commitado)
+
+### iOS
+
+Requer Mac + Xcode + conta Apple Developer:
+
+```bash
+npm run cap:add:ios   # uma vez
+npm run cap:ios
+```
+
+### Fluxo ao alterar o app
+
+1. Edite `public/aprender/index.html` (ou rode o site com `npm run dev`)
+2. `npm run cap:sync`
+3. Rebuild no Android Studio / Xcode
+
 ## Estrutura
 
 ```
-src/app/          → landing Next.js (marca + mapa)
-public/aprender/  → app educacional (SPA HTML/JS)
-public/images/    → logos e recursos visuais
+src/app/              → landing Next.js (marca + mapa)
+public/aprender/      → app educacional (fonte do Capacitor)
+public/images/        → logos e recursos da landing
+www/                  → cópia gerada para o Capacitor (gitignored)
+android/              → projeto Android Studio
+capacitor.config.ts   → appId, webDir, etc.
+scripts/build-app.mjs → gera www/
 ```
-
-O conteúdo educacional vive em `CONTEUDO_PLATONIA` dentro de `public/aprender/index.html` — edite ali para adicionar lições, livros e regiões.
 
 ## Stack
 
 - Next.js 14 + React + Tailwind (landing)
 - HTML/CSS/JS vanilla (motor de aprendizado, localStorage)
-- Sem backend obrigatório nesta versão (progresso no navegador)
+- Capacitor 7 (shell Android/iOS)
+- Sem backend obrigatório nesta versão
+
+## Próximas fases (mobile)
+
+- **Fase 2:** Splash nativo, Status Bar, Haptics, Share do certificado
+- **Fase 3:** AAB Play Store + TestFlight / App Store
