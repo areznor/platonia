@@ -16,17 +16,19 @@
 # production
 /build
 
-# Capacitor web bundle (gerado por npm run build:app)
-/www
-
-# Android local
+# android/
+# Cap sync already versions android project; keep local build junk ignored
 /android/.gradle/
 /android/app/build/
 /android/build/
 /android/captures/
 /android/local.properties
+/android/app/src/main/assets/public/
 *.keystore
 *.jks
+
+# Capacitor web bundle
+/www
 
 # iOS local
 /ios/App/Pods/

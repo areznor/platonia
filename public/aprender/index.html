@@ -419,6 +419,8 @@ button{font-family:inherit;}
 
 <div id="toast" role="status"></div>
 
+<script src="./native-bridge.js" defer></script>
+
 <script>
 /* ############################################################
    ###  EDITE O CONTEÚDO AQUI  ################################
@@ -734,9 +736,9 @@ function tocarSom(tipo){
     const o = audioCtx.createOscillator(), g = audioCtx.createGain();
     o.connect(g); g.connect(audioCtx.destination);
     const agora = audioCtx.currentTime;
-    if(tipo==="certo"){ o.frequency.value=660; o.type="sine"; g.gain.setValueAtTime(.08,agora); g.gain.exponentialRampToValueAtTime(.001,agora+.18); o.start(agora); o.stop(agora+.2); }
-    else if(tipo==="errado"){ o.frequency.value=180; o.type="triangle"; g.gain.setValueAtTime(.07,agora); g.gain.exponentialRampToValueAtTime(.001,agora+.28); o.start(agora); o.stop(agora+.3); }
-    else if(tipo==="vitoria"){ [523,659,784].forEach((f,i)=>{ const o2=audioCtx.createOscillator(), g2=audioCtx.createGain(); o2.connect(g2); g2.connect(audioCtx.destination); o2.frequency.value=f; o2.type="sine"; const t=agora+i*.12; g2.gain.setValueAtTime(.06,t); g2.gain.exponentialRampToValueAtTime(.001,t+.25); o2.start(t); o2.stop(t+.28); }); }
+    if(tipo==="certo"){ o.frequency.value=660; o.type="sine"; g.gain.setValueAtTime(.08,agora); g.gain.exponentialRampToValueAtTime(.001,agora+.18); o.start(agora); o.stop(agora+.2); window.PlatoniaNative?.hapticOk?.(); }
+    else if(tipo==="errado"){ o.frequency.value=180; o.type="triangle"; g.gain.setValueAtTime(.07,agora); g.gain.exponentialRampToValueAtTime(.001,agora+.28); o.start(agora); o.stop(agora+.3); window.PlatoniaNative?.hapticErro?.(); }
+    else if(tipo==="vitoria"){ [523,659,784].forEach((f,i)=>{ const o2=audioCtx.createOscillator(), g2=audioCtx.createGain(); o2.connect(g2); g2.connect(audioCtx.destination); o2.frequency.value=f; o2.type="sine"; const t=agora+i*.12; g2.gain.setValueAtTime(.06,t); g2.gain.exponentialRampToValueAtTime(.001,t+.25); o2.start(t); o2.stop(t+.28); }); window.PlatoniaNative?.hapticVitoria?.(); }
   }catch(e){ /* silencioso se o browser bloquear áudio */ }
 }
 let ESTADO = estadoNovo();
@@ -1551,7 +1553,8 @@ function renderCertificado(regiaoId){
       <h2 class="titulo-secao" style="margin:0;">🎓 Seu certificado</h2>
     </div>
     <canvas id="canvas-cert" width="1000" height="700"></canvas>
-    <button class="btn btn-verde btn-largo" id="botao-baixar" style="margin-top:14px;">⬇️ Baixar certificado (PNG)</button>`;
+    <button class="btn btn-verde btn-largo" id="botao-baixar" style="margin-top:14px;">⬇️ Baixar certificado (PNG)</button>
+    <button class="btn btn-azul btn-largo" id="botao-compartilhar" style="margin-top:10px;">📤 Compartilhar</button>`;
   const cv = $("#canvas-cert"), ctx = cv.getContext("2d");
   // Fundo e molduras
   ctx.fillStyle = "#FDFBF3"; ctx.fillRect(0,0,1000,700);
@@ -1595,6 +1598,14 @@ function renderCertificado(regiaoId){
     a.href = cv.toDataURL("image/png");
     a.click();
   });
+  $("#botao-compartilhar").addEventListener("click", async ()=>{
+    const ok = await window.PlatoniaNative?.compartilharCertificado?.(
+      cv.toDataURL("image/png"),
+      "Certificado — " + r.certificado.titulo
+    );
+    if(ok) toast("📤 Certificado pronto para compartilhar!");
+    else toast("Não foi possível compartilhar. Use o botão de baixar.");
+  });
 }
 
 /* ---------- Fluxo inicial: splash → cadastro → visto → mapa ---------- */
@@ -1616,6 +1627,37 @@ function iniciarApp(){
   atualizarTopbar();
   montarAvataresCadastro();
   setInterval(atualizarTopbar, 1000);
+  window.PlatoniaNative?.init?.();
+
+  window.PlatoniaNav = {
+    onBack(){
+      const licaoAtiva = $("#tela-licao")?.classList.contains("ativa");
+      if(licaoAtiva && LICAO){
+        if(confirm("Sair da lição? O progresso desta lição será perdido.")){
+          irPara("trilha", LICAO.regiaoId);
+        }
+        return true;
+      }
+      if($("#voltar-mapa")){ irPara("mapa"); return true; }
+      if($("#voltar-bib")){ irPara("biblioteca"); return true; }
+      if($("#voltar-perfil")){ irPara("perfil"); return true; }
+      const shellAtiva = $("#shell")?.classList.contains("ativa");
+      if(shellAtiva){
+        const destAtivo = document.querySelector(".nav-item.ativo")?.dataset?.dest;
+        if(destAtivo && destAtivo !== "mapa"){
+          irPara("mapa");
+          return true;
+        }
+      }
+      const cadastro = $("#tela-cadastro")?.classList.contains("ativa");
+      const visto = $("#tela-visto")?.classList.contains("ativa");
+      const vitoria = $("#tela-vitoria")?.classList.contains("ativa");
+      const semCor = $("#tela-semcoracoes")?.classList.contains("ativa");
+      if(cadastro || visto){ mostrarTela("tela-splash"); return true; }
+      if(vitoria || semCor){ irPara("mapa"); return true; }
+      return false;
+    }
+  };
 
   // Splash: tocar na luz
   $("#botao-luz").addEventListener("click",()=>{
