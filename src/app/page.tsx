@@ -160,6 +160,11 @@ export default function Home() {
         <p className="mt-2 text-[#5b6b80]">
           Saia da caverna. Tire agora mesmo o seu passaporte.
         </p>
+        <p className="mt-4">
+          <Link href="/privacidade" className="text-[#58a6ff] underline">
+            Política de privacidade
+          </Link>
+        </p>
       </footer>
     </div>
   );

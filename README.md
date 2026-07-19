@@ -59,7 +59,16 @@ npm run cap:sync
 
 ## Próxima fase (lojas)
 
-- **Fase 3:** ícones/splash de marca, keystore, AAB Play Store, TestFlight/App Store
+Ver guia completo: [`docs/STORE.md`](docs/STORE.md)
+
+```bash
+npm run assets:generate   # ícones + splash a partir da marca
+# keystore: ver android/keystore.properties.example
+npm run build:aab         # requer Android Studio / SDK + keystore
+```
+
+- Versão Android: **2.0.0** (`versionCode` 2)
+- Privacidade: [/privacidade](http://localhost:3000/privacidade)
 
 ## Estrutura
 

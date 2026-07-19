@@ -26,6 +26,10 @@
 /android/app/src/main/assets/public/
 *.keystore
 *.jks
+keystore.properties
+/android/keystore.properties
+/android/*.keystore
+/android/*.jks
 
 # Capacitor web bundle
 /www
