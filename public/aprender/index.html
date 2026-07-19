@@ -946,7 +946,7 @@ function renderMapa(){
         <span class="icone">${r.icone}</span>
         <h3>${esc(r.nome)}</h3>
         <div class="barra-prog"><div style="width:${liberada?pct:0}%; background:linear-gradient(90deg,${r.cor},${r.cor}CC);"></div></div>
-        <span class="pct">${liberada ? (pct + "% concluído") : "Leia na Biblioteca ou avance 50% em outra região"}</span>
+        <span class="pct">${liberada ? (pct + "% concluído") : "Leia o livro da região ou conclua outra trilha para liberar"}</span>
       </button>`;
   }
   html += `</div>
@@ -955,7 +955,7 @@ function renderMapa(){
     </div>`;
   $("#conteudo").innerHTML = html;
   document.querySelectorAll(".regiao-cartao").forEach(b=>b.addEventListener("click",()=>{
-    if(b.dataset.bloq){ toast("🔒 Explore mais a Biblioteca ou avance nas regiões iniciais para liberar esta!"); return; }
+    if(b.dataset.bloq){ toast("🔒 Conclua uma região ou leia o livro correspondente na Biblioteca para liberar!"); return; }
     irPara("trilha", b.dataset.regiao);
   }));
 }
