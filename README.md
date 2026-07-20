@@ -57,9 +57,13 @@ No Android Studio: Run ▶
 npm run cap:sync
 ```
 
-## Próxima fase (lojas)
+## Auth e Netlify
 
-Ver guia completo: [`docs/STORE.md`](docs/STORE.md)
+Contas reais exigem MongoDB Atlas + variáveis no Netlify (`MONGODB_URI`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`).  
+Guia: [`docs/DEPLOY.md`](docs/DEPLOY.md)
+
+Rotas: `/entrar`, `/cadastro`, `/sair`, `/aprender/` (cidade point-and-click + catálogo).
+
 
 ```bash
 npm run assets:generate   # ícones + splash a partir da marca

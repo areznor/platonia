@@ -287,6 +287,32 @@ button{font-family:inherit;}
 .splash-colunas{position:absolute; inset:0; pointer-events:none; opacity:.18;
   background:linear-gradient(90deg, transparent 8%, rgba(255,200,0,.15) 12%, transparent 16%),
              linear-gradient(90deg, transparent 84%, rgba(255,200,0,.15) 88%, transparent 92%);}
+.cidade-wrap{position:relative; border-radius:20px; overflow:hidden; border:3px solid var(--cinza);
+  box-shadow:0 6px 0 var(--cinza); background:#d8e6f5;}
+.cidade-mapa{display:block; width:100%; height:auto; vertical-align:middle;}
+.cidade-hotspots{position:absolute; inset:0;}
+.hotspot{position:absolute; transform:translate(-50%,-50%); width:14%; min-width:72px; aspect-ratio:1;
+  border:3px solid rgba(255,255,255,.85); border-radius:18px; background:rgba(255,255,255,.55);
+  backdrop-filter:blur(2px); cursor:pointer; font-family:inherit; font-weight:900; font-size:.68rem;
+  color:var(--tinta); display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px; box-shadow:0 4px 12px rgba(22,50,79,.2); transition:transform .12s, background .12s;}
+.hotspot:hover{transform:translate(-50%,-50%) scale(1.08); background:rgba(255,255,255,.9);}
+.hotspot .hi{font-size:1.5rem; line-height:1;}
+.hotspot.bloqueado{filter:grayscale(.5); opacity:.7; cursor:not-allowed;}
+.hotspot.bib{width:11%; border-color:var(--ouro); background:rgba(255,249,227,.85);}
+.btn-sair-topo{margin-left:auto; background:none; border:2px solid var(--cinza); border-radius:12px;
+  padding:6px 10px; font-weight:900; font-size:.75rem; color:var(--verm); cursor:pointer;}
+.avatar-foto{width:72px; height:72px; border-radius:50%; object-fit:cover; border:3px solid var(--ouro);}
+.upload-foto{margin-top:10px;}
+.lang-app{position:relative;}
+.lang-app-btn{background:#fff; border:2px solid var(--cinza); border-radius:12px; padding:6px 10px;
+  font-weight:900; font-size:.75rem; cursor:pointer;}
+.lang-app-menu{display:none; position:absolute; right:0; top:110%; background:#fff; border:2px solid var(--cinza);
+  border-radius:14px; min-width:160px; z-index:40; box-shadow:0 8px 20px rgba(0,0,0,.12);}
+.lang-app-menu.aberto{display:block;}
+.lang-app-menu button{display:block; width:100%; text-align:left; border:none; background:none;
+  padding:10px 12px; font-weight:800; cursor:pointer;}
+.lang-app-menu button:hover{background:#E3F0FB;}
 
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important; transition:none !important;}
@@ -373,10 +399,16 @@ button{font-family:inherit;}
     <div class="stat" title="Dracmas">🪙 <b id="stat-dracmas">0</b></div>
     <div class="stat" title="Corações">❤️ <b id="stat-coracoes">5</b><span class="coracao-timer" id="stat-coracao-timer"></span></div>
     <div class="stat" title="Experiência">⭐ <b id="stat-xp">0</b></div>
+    <div class="lang-app" id="lang-app">
+      <button type="button" class="lang-app-btn" id="lang-app-btn">🌐 PT</button>
+      <div class="lang-app-menu" id="lang-app-menu"></div>
+    </div>
+    <button type="button" class="btn-sair-topo" id="botao-sair-conta">Sair</button>
   </div>
   <main id="conteudo"></main>
   <nav id="navbar" aria-label="Navegação principal">
-    <button class="nav-item ativo" data-dest="mapa">🗺️<span>Mapa</span></button>
+    <button class="nav-item ativo" data-dest="mapa">🗺️<span>Cidade</span></button>
+    <button class="nav-item" data-dest="catalogo">📋<span>Catálogo</span></button>
     <button class="nav-item" data-dest="biblioteca">📚<span>Biblioteca</span></button>
     <button class="nav-item" data-dest="ligas">🏆<span>Ligas</span></button>
     <button class="nav-item" data-dest="loja">🏺<span>Ágora</span></button>
@@ -688,7 +720,26 @@ const CONTEUDO_PLATONIA = {
 
 /* ---------- Constantes ---------- */
 const CHAVE_SAVE = "platonia_save_v2";
-const AVATARES_BASE = ["🦉","🏺","📜","⚱️"];
+const AVATARES_BASE = ["🦉","🏺","📜","⚱️","🏛️","⚔️","🌿","💻","🎓","🕯️","⚖️","🧭"];
+const HOTSPOTS_CIDADE = [
+  { id:"filosofia", left:"23.5%", top:"28%", icone:"🦉", label:"Filosofia" },
+  { id:"matematica", left:"15.5%", top:"58%", icone:"🏛️", label:"Matemática" },
+  { id:"historia", left:"31%", top:"76%", icone:"📜", label:"História" },
+  { id:"gramatica", left:"56%", top:"78%", icone:"✍️", label:"Gramática" },
+  { id:"artes", left:"74%", top:"72%", icone:"🎨", label:"Artes" },
+  { id:"tecnologia", left:"82.5%", top:"53%", icone:"💻", label:"Tecnologia" },
+  { id:"ciencias", left:"74%", top:"29%", icone:"🔬", label:"Ciências" },
+  { id:"saude", left:"60%", top:"22%", icone:"🌿", label:"Saúde" },
+];
+const LANGS_APP = [
+  {code:"pt",flag:"🇧🇷",label:"Português"},
+  {code:"en",flag:"🇬🇧",label:"English"},
+  {code:"fr",flag:"🇫🇷",label:"Français"},
+  {code:"es",flag:"🇪🇸",label:"Español"},
+  {code:"it",flag:"🇮🇹",label:"Italiano"},
+  {code:"de",flag:"🇩🇪",label:"Deutsch"}
+];
+let LANG_APP = localStorage.getItem("platonia_lang") || "pt";
 const MEIA_HORA = 30 * 60 * 1000;
 const META_DIARIA_XP = 30;
 const REGIOES_INICIAIS = ["filosofia","matematica","gramatica"];
@@ -744,8 +795,9 @@ function tocarSom(tipo){
 let ESTADO = estadoNovo();
 
 function salvarProgresso(){
-  try{ localStorage.setItem(CHAVE_SAVE, JSON.stringify(ESTADO)); }
-  catch(e){ console.warn("Não foi possível salvar o progresso.", e); }
+  salvarProgressoLocal();
+  if(window._platoniaSyncTimer) clearTimeout(window._platoniaSyncTimer);
+  window._platoniaSyncTimer = setTimeout(()=>syncProgressoNuvem(), 800);
 }
 function carregarProgresso(){
   try{
@@ -912,6 +964,7 @@ function irPara(dest, extra){
   mostrarTela("shell");
   document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("ativo", b.dataset.dest===dest));
   if(dest==="mapa") renderMapa();
+  else if(dest==="catalogo") renderCatalogo();
   else if(dest==="trilha") renderTrilha(extra);
   else if(dest==="biblioteca") renderBiblioteca();
   else if(dest==="leitor") renderLeitor(extra);
@@ -928,15 +981,47 @@ function renderMapa(){
   tentarDesbloquearRegioes();
   const nome = ESTADO.perfil ? esc(ESTADO.perfil.nome.split(" ")[0]) : "cidadão";
   const metaPct = Math.min(100, Math.round(100 * ESTADO.metaDiaria.xp / ESTADO.metaDiaria.meta));
-  let html = `
+  let hotspots = HOTSPOTS_CIDADE.map(h=>{
+    const liberada = regiaoDesbloqueada(h.id);
+    return `<button type="button" class="hotspot ${liberada?"":"bloqueado"}" style="left:${h.left};top:${h.top};"
+      data-regiao="${h.id}" ${liberada?"":'data-bloq="1"'} aria-label="${esc(h.label)}">
+      <span class="hi">${h.icone}</span><span>${esc(h.label)}</span>
+    </button>`;
+  }).join("");
+  $("#conteudo").innerHTML = `
     <div class="faixa-mapa">
-      <h2>Mapa de Platonia 🗺️</h2>
-      <p>Olá, ${nome}! Escolha uma região e siga sua trilha do saber.</p>
+      <h2>Cidade de Platonia 🗺️</h2>
+      <p>Olá, ${nome}! Explore a cidade e toque em um bairro para iniciar a trilha.</p>
     </div>
     <div class="meta-diaria">
       <div class="topo"><b>🎯 Meta diária</b><span>${ESTADO.metaDiaria.xp}/${ESTADO.metaDiaria.meta} XP</span></div>
       <div class="barra-prog"><div style="width:${metaPct}%;"></div></div>
     </div>
+    <div class="cidade-wrap">
+      <img class="cidade-mapa" src="/images/mapa/platonia-cidade.svg" alt="Mapa navegável de Platonia" width="1600" height="900">
+      <div class="cidade-hotspots">
+        ${hotspots}
+        <button type="button" class="hotspot bib" style="left:50%;top:53%;" data-bib="1" aria-label="Biblioteca">
+          <span class="hi">📚</span><span>Biblioteca</span>
+        </button>
+      </div>
+    </div>
+    <p style="margin-top:14px; color:var(--texto2); font-weight:700; font-size:.85rem; text-align:center;">
+      Prefere a lista? Abra o <b>Catálogo</b> na barra lateral.
+    </p>`;
+  document.querySelectorAll(".hotspot[data-regiao]").forEach(b=>b.addEventListener("click",()=>{
+    if(b.dataset.bloq){ toast("🔒 Conclua uma região ou leia o livro correspondente na Biblioteca para liberar!"); return; }
+    irPara("trilha", b.dataset.regiao);
+  }));
+  document.querySelector(".hotspot[data-bib]")?.addEventListener("click",()=>irPara("biblioteca"));
+}
+
+function renderCatalogo(){
+  garantirMetaDiaria();
+  tentarDesbloquearRegioes();
+  let html = `
+    <h2 class="titulo-secao">📋 Catálogo de trilhas</h2>
+    <p class="subtitulo-secao">Todas as áreas de conhecimento em lista. A cidade continua sendo o hub principal.</p>
     <div class="mapa-grade">`;
   for(const r of CONTEUDO_PLATONIA.regioes){
     const pct = progressoRegiao(r);
@@ -951,10 +1036,7 @@ function renderMapa(){
         <span class="pct">${liberada ? (pct + "% concluído") : "Leia o livro da região ou conclua outra trilha para liberar"}</span>
       </button>`;
   }
-  html += `</div>
-    <div class="cartao" style="margin-top:18px; border-color:var(--ouro); box-shadow:0 4px 0 var(--ouro-esc);">
-      <b>📚 Dica de Platonia:</b> <span style="color:var(--texto2); font-weight:700;">livros da Biblioteca revelam <b>caminhos ocultos</b> e ajudam a liberar novas regiões!</span>
-    </div>`;
+  html += `</div>`;
   $("#conteudo").innerHTML = html;
   document.querySelectorAll(".regiao-cartao").forEach(b=>b.addEventListener("click",()=>{
     if(b.dataset.bloq){ toast("🔒 Conclua uma região ou leia o livro correspondente na Biblioteca para liberar!"); return; }
@@ -1486,21 +1568,32 @@ function renderLigas(){
 /* ---------- TELA: Perfil ---------- */
 function renderPerfil(){
   const p = ESTADO.perfil;
-  const avataresDisponiveis = [...AVATARES_BASE, ...ESTADO.trajes.map(t=>ITENS_LOJA.find(i=>i.id===t).icone)];
+  const avataresDisponiveis = [...AVATARES_BASE, ...ESTADO.trajes.map(t=>{
+    const item = ITENS_LOJA.find(i=>i.id===t); return item ? item.icone : null;
+  }).filter(Boolean)];
+  const avatarHtml = (p.avatar && String(p.avatar).startsWith("data:image/"))
+    ? `<img class="avatar-foto" src="${p.avatar}" alt="Foto de perfil">`
+    : `<div class="perfil-avatar">${p.avatar || "🦉"}</div>`;
   let html = `
     <div class="perfil-topo">
-      <div class="perfil-avatar">${p.avatar}</div>
+      ${avatarHtml}
       <div>
         <h2 style="margin:0;">${esc(p.nome)}</h2>
         <p style="margin:2px 0 0; color:var(--texto2); font-weight:700; font-size:.85rem;">Cidadão de Platonia · ${esc(p.email)}</p>
       </div>
     </div>
-    <p style="font-weight:800; font-size:.8rem; color:var(--texto2); text-transform:uppercase; letter-spacing:1px;">Trocar retrato</p>
+    <p style="font-weight:800; font-size:.8rem; color:var(--texto2); text-transform:uppercase; letter-spacing:1px;">Escolher avatar</p>
     <div class="avatares" style="justify-content:flex-start;">`;
   avataresDisponiveis.forEach(a=>{
     html += `<button class="avatar-opcao ${a===p.avatar?"selecionado":""}" data-av="${a}">${a}</button>`;
   });
   html += `</div>
+    <div class="upload-foto">
+      <label class="btn btn-branco" style="display:inline-block;">📷 Enviar foto
+        <input id="input-foto" type="file" accept="image/jpeg,image/png,image/webp" style="display:none;">
+      </label>
+      <p style="font-size:.75rem; color:var(--texto2); font-weight:700; margin-top:6px;">Filtro básico anti-conteúdo ofensivo no dispositivo (máx. 1,5 MB).</p>
+    </div>
     <div class="grade-stats">
       <div class="stat-caixa"><div class="valor">⭐ ${ESTADO.xp}</div><div class="nome">XP total</div></div>
       <div class="stat-caixa"><div class="valor">🔥 ${ESTADO.streak.dias}</div><div class="nome">Ofensiva</div></div>
@@ -1528,19 +1621,122 @@ function renderPerfil(){
       <div class="icone">${c.icone}</div><h4>${esc(c.nome)}</h4><p>${esc(c.desc)}</p></div>`;
   }
   html += `</div>
-    <button class="btn btn-verm btn-largo" id="botao-reiniciar" style="margin-top:24px;">Recomeçar do zero (apaga o progresso)</button>`;
+    <button class="btn btn-verm btn-largo" id="botao-sair-perfil" style="margin-top:24px;">Sair da conta</button>
+    <button class="btn btn-branco btn-largo" id="botao-reiniciar" style="margin-top:10px;">Recomeçar progresso local</button>`;
   $("#conteudo").innerHTML = html;
   document.querySelectorAll(".avatar-opcao").forEach(b=>b.addEventListener("click",()=>{
-    ESTADO.perfil.avatar = b.dataset.av; salvarProgresso(); renderPerfil();
+    ESTADO.perfil.avatar = b.dataset.av; salvarProgresso(); syncAvatarServidor(b.dataset.av); renderPerfil();
   }));
   document.querySelectorAll("[data-cert]").forEach(b=>b.addEventListener("click",()=>irPara("certificado", b.dataset.cert)));
-  $("#botao-reiniciar").addEventListener("click",()=>{
-    if(confirm("Tem certeza? Todo o seu progresso em Platonia será apagado.")){
-      localStorage.removeItem(CHAVE_SAVE);
-      localStorage.removeItem("platonia_save_v1");
-      location.reload();
+  $("#botao-sair-perfil").addEventListener("click", sairConta);
+  $("#input-foto").addEventListener("change", async (e)=>{
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    try{
+      const dataUrl = await processarFotoSegura(file);
+      ESTADO.perfil.avatar = dataUrl;
+      salvarProgresso();
+      await syncAvatarServidor(dataUrl, true);
+      toast("📷 Foto atualizada!");
+      renderPerfil();
+    }catch(err){
+      toast(String(err.message || err));
     }
   });
+  $("#botao-reiniciar").addEventListener("click",()=>{
+    if(confirm("Tem certeza? O progresso local será apagado (a conta continua existindo).")){
+      const perfil = ESTADO.perfil;
+      localStorage.removeItem(CHAVE_SAVE);
+      localStorage.removeItem("platonia_save_v1");
+      ESTADO = estadoNovo();
+      ESTADO.perfil = perfil;
+      salvarProgresso();
+      irPara("mapa");
+    }
+  });
+}
+
+async function processarFotoSegura(file){
+  if(!file.type.match(/^image\/(jpeg|png|webp)$/)) throw new Error("Use JPG, PNG ou WebP.");
+  if(file.size > 1.5 * 1024 * 1024) throw new Error("Imagem maior que 1,5 MB.");
+  const dataUrl = await new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>resolve(reader.result);
+    reader.onerror = ()=>reject(new Error("Falha ao ler a imagem."));
+    reader.readAsDataURL(file);
+  });
+  // Filtro básico de pele/exposição via amostragem de pixels (heurística leve)
+  const img = await new Promise((resolve,reject)=>{
+    const i = new Image();
+    i.onload = ()=>resolve(i);
+    i.onerror = ()=>reject(new Error("Imagem inválida."));
+    i.src = dataUrl;
+  });
+  const cv = document.createElement("canvas");
+  const size = 64;
+  cv.width = size; cv.height = size;
+  const ctx = cv.getContext("2d");
+  ctx.drawImage(img, 0, 0, size, size);
+  const { data } = ctx.getImageData(0, 0, size, size);
+  let skin = 0, total = size * size;
+  for(let i=0;i<data.length;i+=4){
+    const r=data[i], g=data[i+1], b=data[i+2];
+    const max=Math.max(r,g,b), min=Math.min(r,g,b);
+    if(r>95 && g>40 && b>20 && (max-min)>15 && Math.abs(r-g)>15 && r>g && r>b) skin++;
+  }
+  if(skin/total > 0.62){
+    throw new Error("Foto recusada pelo filtro de segurança. Escolha outro retrato.");
+  }
+  // Reduz para armazenamento
+  const out = document.createElement("canvas");
+  const maxSide = 256;
+  const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+  out.width = Math.round(img.width * scale);
+  out.height = Math.round(img.height * scale);
+  out.getContext("2d").drawImage(img, 0, 0, out.width, out.height);
+  return out.toDataURL("image/jpeg", 0.85);
+}
+
+async function syncAvatarServidor(avatar, clientSafe){
+  try{
+    await fetch("/api/avatar", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ avatar, clientSafe: !!clientSafe || !String(avatar).startsWith("data:") })
+    });
+  }catch(e){ /* offline ok */ }
+}
+
+async function syncProgressoNuvem(){
+  try{
+    await fetch("/api/progress", {
+      method:"PUT",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ progress: ESTADO })
+    });
+  }catch(e){ /* offline ok */ }
+}
+
+async function carregarProgressoNuvem(){
+  try{
+    const res = await fetch("/api/progress");
+    if(!res.ok) return;
+    const data = await res.json();
+    if(data.progress){
+      ESTADO = Object.assign(estadoNovo(), data.progress);
+      salvarProgressoLocal();
+    }
+  }catch(e){ /* offline ok */ }
+}
+
+function sairConta(){
+  if(!confirm("Sair da sua conta em Platonia?")) return;
+  syncProgressoNuvem().finally(()=>{ window.location.href = "/sair"; });
+}
+
+function salvarProgressoLocal(){
+  try{ localStorage.setItem(CHAVE_SAVE, JSON.stringify(ESTADO)); }
+  catch(e){ console.warn("Não foi possível salvar o progresso.", e); }
 }
 
 /* ---------- TELA: Certificado (canvas + download) ---------- */
@@ -1628,6 +1824,32 @@ function iniciarApp(){
   montarAvataresCadastro();
   setInterval(atualizarTopbar, 1000);
   window.PlatoniaNative?.init?.();
+  montarLangApp();
+  $("#botao-sair-conta")?.addEventListener("click", sairConta);
+
+  // Exige sessão NextAuth; senão redireciona para /entrar
+  fetch("/api/auth/session").then(r=>r.json()).then(async sess=>{
+    if(!sess?.user){
+      // permite explorar splash/cadastro legado só se já houver perfil local antigo
+      if(!ESTADO.perfil){
+        // continua no fluxo local, mas botões de conta apontam para Next
+      } else {
+        await carregarProgressoNuvem();
+        atualizarTopbar();
+      }
+    } else {
+      if(!ESTADO.perfil){
+        ESTADO.perfil = {
+          nome: sess.user.name || "Cidadão",
+          email: sess.user.email || "",
+          avatar: sess.user.image || "🦉"
+        };
+        salvarProgressoLocal();
+      }
+      await carregarProgressoNuvem();
+      atualizarTopbar();
+    }
+  }).catch(()=>{});
 
   window.PlatoniaNav = {
     onBack(){
@@ -1659,31 +1881,37 @@ function iniciarApp(){
     }
   };
 
-  // Splash: tocar na luz
+  // Cadastro: emitir passaporte → redireciona para conta real
+  $("#botao-emitir").addEventListener("click",()=>{
+    window.location.href = "/cadastro";
+  });
+
+  // Se já tem perfil local e tocou na luz, entra; senão manda para login/cadastro
   $("#botao-luz").addEventListener("click",()=>{
     $("#tela-splash").classList.add("clareando");
     setTimeout(()=>{
-      if(ESTADO.perfil){ irPara("mapa"); }
-      else{ mostrarTela("tela-cadastro"); }
-      $("#tela-splash").classList.remove("clareando");
+      fetch("/api/auth/session").then(r=>r.json()).then(sess=>{
+        $("#tela-splash").classList.remove("clareando");
+        if(sess?.user){
+          if(!ESTADO.perfil){
+            ESTADO.perfil = { nome: sess.user.name||"Cidadão", email: sess.user.email||"", avatar: sess.user.image||"🦉" };
+            salvarProgresso();
+          }
+          irPara("mapa");
+        } else if(ESTADO.perfil){
+          irPara("mapa");
+        } else {
+          window.location.href = "/cadastro";
+        }
+      }).catch(()=>{
+        $("#tela-splash").classList.remove("clareando");
+        if(ESTADO.perfil) irPara("mapa");
+        else window.location.href = "/cadastro";
+      });
     }, 850);
   });
 
-  // Cadastro: emitir passaporte
-  $("#botao-emitir").addEventListener("click",()=>{
-    const nome = $("#campo-nome").value.trim();
-    const email = $("#campo-email").value.trim();
-    const nomeOk = nome.length >= 2;
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    $("#erro-nome").style.display = nomeOk ? "none" : "block";
-    $("#erro-email").style.display = emailOk ? "none" : "block";
-    if(!nomeOk || !emailOk) return;
-    ESTADO.perfil = { nome, email, avatar: avatarEscolhido };
-    salvarProgresso();
-    mostrarTela("tela-visto");
-  });
-
-  // Visto → tutorial em 3 passos → mapa
+  // Visto → tutorial (mantido para legado)
   $("#botao-tutorial").addEventListener("click",()=>{
     $("#visto-carimbo").style.display = "none";
     $("#visto-tutorial").style.display = "block";
@@ -1706,6 +1934,23 @@ function iniciarApp(){
   });
   $("#botao-ir-biblioteca").addEventListener("click",()=>irPara("biblioteca"));
   $("#botao-ir-loja").addEventListener("click",()=>irPara("loja"));
+}
+
+function montarLangApp(){
+  const btn = $("#lang-app-btn"), menu = $("#lang-app-menu");
+  if(!btn || !menu) return;
+  const cur = LANGS_APP.find(l=>l.code===LANG_APP) || LANGS_APP[0];
+  btn.textContent = cur.flag + " " + cur.code.toUpperCase();
+  menu.innerHTML = LANGS_APP.map(l=>`<button type="button" data-lang="${l.code}">${l.flag} ${l.label}</button>`).join("");
+  btn.onclick = (e)=>{ e.stopPropagation(); menu.classList.toggle("aberto"); };
+  menu.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+    LANG_APP = b.dataset.lang;
+    localStorage.setItem("platonia_lang", LANG_APP);
+    menu.classList.remove("aberto");
+    montarLangApp();
+    toast("Idioma: " + b.textContent);
+  }));
+  document.addEventListener("click",()=>menu.classList.remove("aberto"));
 }
 
 document.addEventListener("DOMContentLoaded", iniciarApp);
