@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
-import { getUsers, mongoConfigured } from "./mongodb";
+import { dbConfigured, ensureSchema, findUserByEmail } from "./db";
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
@@ -17,18 +17,16 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        if (!mongoConfigured()) {
-          throw new Error("Servidor sem banco configurado (MONGODB_URI)");
+        if (!dbConfigured()) {
+          throw new Error("Servidor sem banco configurado (DATABASE_URL / Neon)");
         }
-        const users = await getUsers();
-        const user = await users.findOne({
-          email: credentials.email.toLowerCase().trim(),
-        });
-        if (!user?.passwordHash) return null;
-        const ok = await compare(credentials.password, user.passwordHash);
+        await ensureSchema();
+        const user = await findUserByEmail(credentials.email);
+        if (!user?.password_hash) return null;
+        const ok = await compare(credentials.password, user.password_hash);
         if (!ok) return null;
         return {
-          id: String(user._id),
+          id: user.id,
           name: user.name,
           email: user.email,
           image: user.avatar || null,

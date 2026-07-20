@@ -59,7 +59,7 @@ npm run cap:sync
 
 ## Auth e Netlify
 
-Contas reais exigem MongoDB Atlas + variáveis no Netlify (`MONGODB_URI`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`).  
+Contas reais exigem Neon Postgres + variáveis no Netlify (`DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`).  
 Guia: [`docs/DEPLOY.md`](docs/DEPLOY.md)
 
 Rotas: `/entrar`, `/cadastro`, `/sair`, `/aprender/` (cidade point-and-click + catálogo).
@@ -76,7 +76,7 @@ npm run build:aab         # requer Android Studio / SDK + keystore
 
 ## Auth e Netlify
 
-Contas reais exigem MongoDB Atlas + variáveis no Netlify (`MONGODB_URI`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`).  
+Contas reais exigem Neon Postgres + variáveis no Netlify (`DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`).  
 Guia: [`docs/DEPLOY.md`](docs/DEPLOY.md)
 
 Rotas: `/entrar`, `/cadastro`, `/sair`, `/aprender/` (cidade point-and-click + catálogo).

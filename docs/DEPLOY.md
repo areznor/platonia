@@ -2,22 +2,23 @@
 
 ## Atualizar o site existente
 
-1. No Netlify, abra o site antigo do Platonia.
+1. No Netlify, abra o site do Platonia.
 2. **Site configuration → Build & deploy**
    - Repository: `areznor/platonia`
    - Branch: `main`
-   - Build command: `npm run build` (ou deixe o `netlify.toml`)
-   - Plugin: Essential Next.js
+   - Build: use o `netlify.toml` (Next.js)
 3. **Environment variables** (obrigatórias para contas reais):
 
 | Variável | Exemplo |
 |----------|---------|
-| `MONGODB_URI` | string do MongoDB Atlas |
-| `MONGODB_DB` | `platonia` |
+| `DATABASE_URL` | Connection string do **Neon** (Postgres) |
 | `NEXTAUTH_SECRET` | `openssl rand -base64 32` |
 | `NEXTAUTH_URL` | `https://SEU-DOMINIO` (ex. `https://platonia.academy`) |
 
-4. **Deploys → Trigger deploy → Clear cache and deploy site**
+4. No [Neon Console](https://console.neon.tech): crie um projeto → copie a connection string → cole como `DATABASE_URL`.
+   - Em serverless (Netlify), prefira a URL **pooled** se o Neon oferecer.
+5. Opcional: rode `db/schema.sql` no SQL Editor do Neon (o app também cria as tabelas sozinho no primeiro uso).
+6. **Deploys → Trigger deploy → Clear cache and deploy site**
 
 ## Domínio
 
@@ -30,7 +31,7 @@ Privacidade: `https://platonia.academy/privacidade`
 |-----|--------|
 | `/` | Landing + idiomas |
 | `/entrar` | Login real |
-| `/cadastro` | Criar passaporte (MongoDB) |
+| `/cadastro` | Criar passaporte (Neon) |
 | `/aprender/` | App (cidade + trilhas) |
 | `/sair` | Logout |
 | `/privacidade` | Política |

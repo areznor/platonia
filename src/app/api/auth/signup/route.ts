@@ -1,14 +1,19 @@
 import { NextResponse } from "next/server";
 import { hash } from "bcryptjs";
-import { getUsers, mongoConfigured } from "@/lib/mongodb";
+import {
+  createUser,
+  dbConfigured,
+  ensureSchema,
+  findUserByEmail,
+} from "@/lib/db";
 
 export async function POST(req: Request) {
   try {
-    if (!mongoConfigured()) {
+    if (!dbConfigured()) {
       return NextResponse.json(
         {
           message:
-            "Cadastro indisponível: configure MONGODB_URI e NEXTAUTH_SECRET no Netlify.",
+            "Cadastro indisponível: configure DATABASE_URL (Neon) e NEXTAUTH_SECRET no Netlify.",
         },
         { status: 503 }
       );
@@ -33,8 +38,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const users = await getUsers();
-    const existing = await users.findOne({ email });
+    await ensureSchema();
+    const existing = await findUserByEmail(email);
     if (existing) {
       return NextResponse.json(
         { message: "Este e-mail já tem passaporte em Platonia." },
@@ -43,17 +48,11 @@ export async function POST(req: Request) {
     }
 
     const passwordHash = await hash(password, 12);
-    const result = await users.insertOne({
-      name,
-      email,
-      passwordHash,
-      avatar,
-      createdAt: new Date(),
-    });
+    const user = await createUser({ name, email, passwordHash, avatar });
 
     return NextResponse.json({
       message: "Passaporte emitido!",
-      user: { id: String(result.insertedId), name, email, avatar },
+      user: { id: user.id, name: user.name, email: user.email, avatar: user.avatar },
     });
   } catch (e) {
     console.error(e);
