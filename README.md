@@ -74,6 +74,13 @@ npm run build:aab         # requer Android Studio / SDK + keystore
 - Versão Android: **2.0.0** (`versionCode` 2)
 - Privacidade: [/privacidade](http://localhost:3000/privacidade)
 
+## Auth e Netlify
+
+Contas reais exigem MongoDB Atlas + variáveis no Netlify (`MONGODB_URI`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`).  
+Guia: [`docs/DEPLOY.md`](docs/DEPLOY.md)
+
+Rotas: `/entrar`, `/cadastro`, `/sair`, `/aprender/` (cidade point-and-click + catálogo).
+
 ## Estrutura
 
 ```
