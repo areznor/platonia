@@ -134,7 +134,7 @@ export default function Home() {
             <div className="relative aspect-[16/9] w-full bg-[#d8e6f5]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/images/mapa/platonia-cidade.svg"
+                src="/images/mapa/platonia-mapa-cidade.png"
                 alt={t(lang, "map.title")}
                 className="h-full w-full object-cover"
               />

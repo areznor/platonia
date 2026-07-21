@@ -291,7 +291,10 @@ button{font-family:inherit;}
   box-shadow:0 6px 0 var(--cinza); background:#d8e6f5;}
 .cidade-mapa{display:block; width:100%; height:auto; vertical-align:middle;}
 .cidade-hotspots{position:absolute; inset:0;}
-.hotspot{position:absolute; transform:translate(-50%,-50%); width:14%; min-width:72px; aspect-ratio:1;
+.cenario-hero{width:100%; border-radius:18px; overflow:hidden; border:2px solid var(--cinza);
+  box-shadow:0 4px 0 var(--cinza); margin:0 0 16px; aspect-ratio:16/9; background:#d8e6f5;}
+.cenario-hero img{width:100%; height:100%; object-fit:cover; display:block;}
+.hotspot{position:absolute; transform:translate(-50%,-50%); width:12%; min-width:64px; aspect-ratio:1;
   border:3px solid rgba(255,255,255,.85); border-radius:18px; background:rgba(255,255,255,.55);
   backdrop-filter:blur(2px); cursor:pointer; font-family:inherit; font-weight:900; font-size:.68rem;
   color:var(--tinta); display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -722,15 +725,19 @@ const CONTEUDO_PLATONIA = {
 const CHAVE_SAVE = "platonia_save_v2";
 const AVATARES_BASE = ["🦉","🏺","📜","⚱️","🏛️","⚔️","🌿","💻","🎓","🕯️","⚖️","🧭"];
 const HOTSPOTS_CIDADE = [
-  { id:"filosofia", left:"23.5%", top:"28%", icone:"🦉", label:"Filosofia" },
-  { id:"matematica", left:"15.5%", top:"58%", icone:"🏛️", label:"Matemática" },
-  { id:"historia", left:"31%", top:"76%", icone:"📜", label:"História" },
-  { id:"gramatica", left:"56%", top:"78%", icone:"✍️", label:"Gramática" },
-  { id:"artes", left:"74%", top:"72%", icone:"🎨", label:"Artes" },
-  { id:"tecnologia", left:"82.5%", top:"53%", icone:"💻", label:"Tecnologia" },
-  { id:"ciencias", left:"74%", top:"29%", icone:"🔬", label:"Ciências" },
-  { id:"saude", left:"60%", top:"22%", icone:"🌿", label:"Saúde" },
+  /* Layout Cidade do Saber — posições no mapa isométrico */
+  { id:"filosofia", left:"36%", top:"26%", icone:"🦉", label:"Filosofia" },
+  { id:"matematica", left:"54%", top:"24%", icone:"🏛️", label:"Matemática" },
+  { id:"ciencias", left:"20%", top:"46%", icone:"🔬", label:"Ciências" },
+  { id:"tecnologia", left:"80%", top:"42%", icone:"💻", label:"Tecnologia" },
+  { id:"artes", left:"74%", top:"60%", icone:"🎨", label:"Artes" },
+  { id:"historia", left:"34%", top:"68%", icone:"📜", label:"História" },
+  { id:"gramatica", left:"58%", top:"70%", icone:"✍️", label:"Gramática" },
+  { id:"saude", left:"48%", top:"80%", icone:"🌿", label:"Saúde" },
 ];
+function cenarioImg(id){
+  return "/images/mapa/cenarios/" + id + ".png";
+}
 const LANGS_APP = [
   {code:"pt",flag:"🇧🇷",label:"Português"},
   {code:"en",flag:"🇬🇧",label:"English"},
@@ -998,10 +1005,10 @@ function renderMapa(){
       <div class="barra-prog"><div style="width:${metaPct}%;"></div></div>
     </div>
     <div class="cidade-wrap">
-      <img class="cidade-mapa" src="/images/mapa/platonia-cidade.svg" alt="Mapa navegável de Platonia" width="1600" height="900">
+      <img class="cidade-mapa" src="/images/mapa/platonia-mapa-cidade.png" alt="Mapa navegável de Platonia" width="1600" height="900">
       <div class="cidade-hotspots">
         ${hotspots}
-        <button type="button" class="hotspot bib" style="left:50%;top:53%;" data-bib="1" aria-label="Biblioteca">
+        <button type="button" class="hotspot bib" style="left:50%;top:48%;" data-bib="1" aria-label="Biblioteca Central">
           <span class="hi">📚</span><span>Biblioteca</span>
         </button>
       </div>
@@ -1058,6 +1065,7 @@ function renderTrilha(regiaoId){
         <p class="subtitulo-secao" style="margin:0;">Seção: ${esc(r.secoes[0].titulo)} · ${progressoRegiao(r)}%</p>
       </div>
     </div>
+    <div class="cenario-hero"><img src="${cenarioImg(regiaoId)}" alt="${esc(r.nome)}"></div>
     <div class="trilha">`;
   let pos = 0, atualDefinida = false;
   for(const sec of r.secoes){
@@ -1409,8 +1417,9 @@ function confete(){
 /* ---------- TELA: Biblioteca ---------- */
 function renderBiblioteca(){
   let html = `
-    <h2 class="titulo-secao">📚 Biblioteca de Platonia</h2>
+    <h2 class="titulo-secao">📚 Biblioteca Central</h2>
     <p class="subtitulo-secao">Resumos de grandes obras e livros-jogo. Terminar um livro revela caminhos ocultos no mapa!</p>
+    <div class="cenario-hero"><img src="${cenarioImg("biblioteca")}" alt="Biblioteca Central"></div>
     <div class="estante">`;
   for(const livro of CONTEUDO_PLATONIA.biblioteca){
     const lido = ESTADO.livrosLidos.includes(livro.id);
